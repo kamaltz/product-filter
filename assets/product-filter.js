@@ -1,12 +1,46 @@
 jQuery(document).ready(function($) {
     
-    // Filter functionality
-    $('.apply-filter-btn').on('click', function() {
+    // Filter accordion functionality
+    $('.filter-title').on('click', function() {
+        const $filterGroup = $(this).closest('.filter-group');
+        const $panel = $filterGroup.find('.filter-panel');
+        
+        if ($filterGroup.hasClass('active')) {
+            $filterGroup.removeClass('active');
+            $panel.slideUp(300);
+        } else {
+            $filterGroup.addClass('active');
+            $panel.slideDown(300);
+        }
+    });
+    
+    // Initialize first filter group as open
+    $('.filter-group:first-child').addClass('active');
+    $('.filter-group:first-child .filter-panel').show();
+    
+    // Handle gender filter change to show/hide size filters
+    $('input[name="filter.p.product_type"]').on('change', function() {
+        const selectedGenders = [];
+        $('input[name="filter.p.product_type"]:checked').each(function() {
+            selectedGenders.push($(this).val());
+        });
+        
+        // Show/hide size filters based on gender selection
+        $('.size-footwear-women-true, .size-footwear-men-true').removeClass('active').hide();
+        
+        if (selectedGenders.includes('Women')) {
+            $('.size-footwear-women-true').addClass('active').show();
+        }
+        if (selectedGenders.includes('Men')) {
+            $('.size-footwear-men-true').addClass('active').show();
+        }
+        
         applyFilters();
     });
     
-    $('.clear-filter-btn').on('click', function() {
-        clearFilters();
+    // Handle all filter changes
+    $(document).on('change', '.filter-item input', function() {
+        applyFilters();
     });
     
     // Pagination functionality
@@ -16,21 +50,6 @@ jQuery(document).ready(function($) {
         
         $('.page-btn').removeClass('active');
         $(this).addClass('active');
-    });
-    
-    // Handle filter option clicks
-    $('.filter-option').on('click', function() {
-        const checkbox = $(this).find('input[type="checkbox"]');
-        checkbox.prop('checked', !checkbox.prop('checked'));
-        $(this).toggleClass('active', checkbox.prop('checked'));
-        
-        // Auto-apply filters
-        applyFilters();
-    });
-    
-    // Initialize active states
-    $('.filter-option input[type="checkbox"]:checked').each(function() {
-        $(this).closest('.filter-option').addClass('active');
     });
     
     function applyFilters(page = 1) {
@@ -96,8 +115,8 @@ jQuery(document).ready(function($) {
     }
     
     function clearFilters() {
-        $('.filter-option input[type="checkbox"]').prop('checked', false);
-        $('.filter-option').removeClass('active');
+        $('.filter-item input[type="checkbox"], .filter-item input[type="radio"]').prop('checked', false);
+        $('.size-footwear-women-true, .size-footwear-men-true').removeClass('active').hide();
         loadProducts(1);
     }
     

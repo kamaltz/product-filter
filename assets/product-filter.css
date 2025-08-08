@@ -1,125 +1,158 @@
-/* Product Filter Styles - Modern E-commerce Design */
-.product-filter {
-    background: #fff;
-    border: none;
-    padding: 0;
-    margin-bottom: 30px;
+/* Filter Styles - Exact Match with Reference */
+.filter-custom {
+    width: 100%;
 }
 
-.filter-title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    color: #1a1a1a;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.inner-filter {
+    width: 100%;
+}
+
+.inner-filter--app {
+    width: 100%;
 }
 
 .filter-group {
-    margin-bottom: 30px;
-    padding-bottom: 0;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 0;
 }
 
-.filter-group h4 {
-    font-size: 16px;
+.filter-title {
+    display: block;
+    padding: 15px 0;
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 15px;
-    color: #1a1a1a;
+    color: #000;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
     position: relative;
-    padding-bottom: 8px;
+    margin: 0;
 }
 
-.filter-group h4:after {
-    content: '';
+.filter-title:after {
+    content: '+';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 30px;
-    height: 2px;
-    background: #000;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    font-weight: 300;
 }
 
-.filter-options {
+.filter-title.filter-active:after {
+    content: '−';
+}
+
+.filter-panel {
+    display: none;
+    padding-bottom: 15px;
+}
+
+.filter-group.active .filter-panel {
+    display: block;
+}
+
+.filter-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.filter-item {
+    margin-bottom: 8px;
+}
+
+.filter-item label {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.filter-option {
-    display: inline-flex;
     align-items: center;
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 25px;
     cursor: pointer;
     font-size: 13px;
     color: #666;
-    transition: all 0.3s ease;
-    background: #fff;
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 0.5px;
+    padding: 5px 0;
+    transition: color 0.3s ease;
 }
 
-.filter-option:hover {
-    border-color: #000;
+.filter-item label:hover {
     color: #000;
 }
 
-.filter-option.active {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-}
-
-.filter-option input[type="checkbox"] {
+.filter-item input[type="checkbox"],
+.filter-item input[type="radio"] {
     display: none;
 }
 
-.filter-actions {
-    display: flex;
-    gap: 15px;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+.box-check {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    position: relative;
+    flex-shrink: 0;
 }
 
-.apply-filter-btn,
-.clear-filter-btn {
-    padding: 12px 30px;
-    border: 2px solid #000;
-    border-radius: 0;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
+.filter-item input:checked + .box-check {
+    background: #000;
+    border-color: #000;
 }
 
-.apply-filter-btn {
+.filter-item input:checked + .box-check:after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.filter-sort-by input:checked + .box-check {
+    background: #000;
+    border-radius: 50%;
+}
+
+.filter-sort-by input:checked + .box-check:after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ukuran-sepatu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.ukuran-sepatu .filter-item label {
+    justify-content: center;
+    padding: 8px 4px;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+    font-size: 12px;
+}
+
+.ukuran-sepatu .filter-item input:checked + span {
     background: #000;
     color: #fff;
 }
 
-.apply-filter-btn:hover {
-    background: #fff;
-    color: #000;
+.size-footwear-women-true,
+.size-footwear-men-true {
+    display: none;
 }
 
-.clear-filter-btn {
-    background: #fff;
-    color: #000;
+.size-footwear-women-true.active,
+.size-footwear-men-true.active {
+    display: block;
 }
 
-.clear-filter-btn:hover {
-    background: #000;
-    color: #fff;
-}
-
-/* Product Display Styles - Modern E-commerce Grid */
+/* Product Display Styles - Exact Match with Reference */
 .product-display-container {
     width: 100%;
 }
@@ -229,32 +262,30 @@
     transform: translateX(-50%) translateY(0);
 }
 
-/* Pagination Styles - Modern Design */
+/* Pagination Styles - Simple Design */
 .product-pagination {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 50px;
-    padding-top: 30px;
-    border-top: 1px solid #eee;
+    gap: 5px;
+    margin-top: 40px;
+    padding-top: 20px;
 }
 
 .page-btn {
-    padding: 12px 16px;
-    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border: 1px solid #e5e5e5;
     background: #fff;
     color: #666;
     cursor: pointer;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 400;
     transition: all 0.3s ease;
-    min-width: 44px;
+    min-width: 40px;
     text-align: center;
 }
 
 .page-btn:hover {
-    border-color: #000;
-    color: #000;
+    background: #f5f5f5;
 }
 
 .page-btn.active {
@@ -266,13 +297,6 @@
 .page-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-.pagination-info {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #666;
 }
 
 .no-products {

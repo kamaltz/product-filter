@@ -92,23 +92,7 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
             ]
         );
         
-        $this->add_control(
-            'show_sorting',
-            [
-                'label' => 'Show Sorting',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
-            ]
-        );
-        
-        $this->add_control(
-            'show_product_count',
-            [
-                'label' => 'Show Product Count',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
-            ]
-        );
+
         
         $this->end_controls_section();
         
@@ -231,22 +215,6 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
         $query = new WP_Query($args);
         ?>
         <div class="product-display-container">
-            <div class="products-header">
-                <div class="products-count">
-                    <?php echo $query->found_posts; ?> Products
-                </div>
-                <div class="products-sort">
-                    <select class="sort-dropdown">
-                        <option value="date-desc">Newest First</option>
-                        <option value="date-asc">Oldest First</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
-                        <option value="title-asc">Name: A to Z</option>
-                        <option value="title-desc">Name: Z to A</option>
-                    </select>
-                </div>
-            </div>
-            
             <div class="products-grid" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
                 <?php
                 if ($query->have_posts()) {
@@ -269,11 +237,6 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
                     echo '<button class="page-btn ' . $active_class . '" data-page="' . $i . '">' . $i . '</button>';
                 }
                 ?>
-                <div class="pagination-info">
-                    Showing <?php echo (($query->get('paged', 1) - 1) * $settings['products_per_page'] + 1); ?> - 
-                    <?php echo min($query->get('paged', 1) * $settings['products_per_page'], $query->found_posts); ?> 
-                    of <?php echo $query->found_posts; ?> products
-                </div>
             </div>
             <?php endif; ?>
         </div>
