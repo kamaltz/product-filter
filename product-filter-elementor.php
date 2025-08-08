@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Custom Elementor widgets for product filtering and display
- * Version: 1.0.2
+ * Version: 1.0.7
  * Author: Your Name
  */
 
