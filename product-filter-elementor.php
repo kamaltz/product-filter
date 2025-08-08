@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Custom Elementor widgets for product filtering and display
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: Your Name
  */
 
@@ -48,6 +48,7 @@ class ProductFilterElementor {
     public function enqueue_scripts() {
         wp_enqueue_script('product-filter-js', PRODUCT_FILTER_ELEMENTOR_URL . 'assets/product-filter.js', ['jquery'], '1.0.0', true);
         wp_enqueue_style('product-filter-css', PRODUCT_FILTER_ELEMENTOR_URL . 'assets/product-filter.css', [], '1.0.0');
+        wp_enqueue_style('product-header-css', PRODUCT_FILTER_ELEMENTOR_URL . 'assets/product-header.css', [], '1.0.0');
         
         wp_localize_script('product-filter-js', 'productFilter', [
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -107,16 +108,16 @@ class ProductFilterElementor {
         $price = get_post_meta($product_id, '_price', true);
         $image = get_the_post_thumbnail_url($product_id, 'medium');
         ?>
-        <div class="product-item">
-            <div class="product-image">
-                <img src="<?php echo esc_url($image); ?>" alt="<?php the_title(); ?>">
-            </div>
-            <div class="product-info">
-                <h3 class="product-title"><?php the_title(); ?></h3>
-                <div class="product-price">Rp <?php echo number_format($price, 0, ',', '.'); ?></div>
-            </div>
-        </div>
-        <?php
+<div class="product-item">
+    <div class="product-image">
+        <img src="<?php echo esc_url($image); ?>" alt="<?php the_title(); ?>">
+    </div>
+    <div class="product-info">
+        <h3 class="product-title"><?php the_title(); ?></h3>
+        <div class="product-price">Rp <?php echo number_format($price, 0, ',', '.'); ?></div>
+    </div>
+</div>
+<?php
     }
 }
 
