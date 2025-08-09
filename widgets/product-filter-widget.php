@@ -305,17 +305,20 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         );
         
         $this->add_control(
-            'sticky_filter',
+            'sticky_desktop',
             [
-                'label' => 'Sticky Filter',
-                'type' => \Elementor\Controls_Manager::SELECT,
-                'default' => 'none',
-                'options' => [
-                    'none' => 'None',
-                    'both' => 'Desktop & Mobile',
-                    'desktop' => 'Desktop Only',
-                    'mobile' => 'Mobile Only',
-                ],
+                'label' => 'Sticky on Desktop',
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'default' => 'no',
+            ]
+        );
+        
+        $this->add_control(
+            'sticky_mobile',
+            [
+                'label' => 'Sticky on Mobile',
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'default' => 'no',
             ]
         );
         
@@ -332,14 +335,19 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
 <?php if ($mobile_toggle): ?>
 <div class="mobile-filter-toggle">
     <button class="filter-toggle-btn">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M4 6H16M4 10H16M4 14H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <svg width="39" height="32" viewBox="0 0 39 32" fill="none">
+            <path d="M25.6054 16.959C21.5723 16.959 17.5376 16.9697 13.5045 16.9452C12.9701 16.9421 12.7438 17.0911 12.5567 17.5886C11.895 19.3422 10.1975 20.4555 8.30983 20.454C6.42372 20.454 4.75609 19.3514 4.07709 17.5717C3.88534 17.068 3.63857 16.9083 3.11361 16.9421C2.43618 16.9866 1.75246 16.9575 1.07189 16.9513C0.421186 16.9452 0.00152706 16.6427 0.00938584 15.9854C0.0172446 15.3236 0.455765 15.0472 1.09861 15.0441C1.83262 15.0411 2.56663 15.0226 3.29907 15.0518C3.71087 15.0687 3.88062 14.9136 4.02522 14.542C4.77181 12.6425 6.39072 11.5369 8.33498 11.543C10.2478 11.5491 11.895 12.6594 12.5866 14.5051C12.7799 15.0226 13.0833 15.0441 13.5296 15.0441C20.6277 15.0364 27.7257 15.0411 34.8238 15.0426C35.8187 15.0426 36.8152 15.0503 37.8101 15.0411C38.4766 15.0349 38.9481 15.2622 38.9952 15.9731C39.0361 16.5889 38.5866 16.9482 37.7834 16.9498C33.7236 16.9544 29.6637 16.9513 25.6039 16.9513V16.9559L25.6054 16.959ZM8.35541 13.4855C6.91726 13.4686 5.74158 14.5881 5.73058 15.9839C5.71958 17.349 6.84181 18.4777 8.24382 18.513C9.69612 18.5499 10.8671 17.4627 10.8954 16.0545C10.9237 14.6403 9.79986 13.5039 8.35541 13.4855Z" fill="black"/>
         </svg>
-        <?php echo esc_html($filter_text); ?>
     </button>
 </div>
 <?php endif; ?>
-<div class="filter-custom <?php echo $mobile_toggle ? 'mobile-hidden' : ''; ?> sticky-<?php echo esc_attr($settings['sticky_filter'] ?: 'none'); ?>">
+<?php 
+$sticky_classes = [];
+if ($settings['sticky_desktop'] === 'yes') $sticky_classes[] = 'sticky-desktop';
+if ($settings['sticky_mobile'] === 'yes') $sticky_classes[] = 'sticky-mobile';
+$sticky_class = implode(' ', $sticky_classes);
+?>
+<div class="filter-custom <?php echo $mobile_toggle ? 'mobile-hidden' : ''; ?> <?php echo esc_attr($sticky_class); ?>">
     <div class="inner-filter">
         <div class="inner-filter--app">
             <?php if ($mobile_toggle): ?>
