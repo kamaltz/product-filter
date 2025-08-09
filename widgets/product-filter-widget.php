@@ -306,13 +306,16 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         
         if (!is_wp_error($categories) && !empty($categories)) {
             foreach ($categories as $category) {
-                echo '<li class="filter-item">';
-                echo '<label for="Filter-category-' . $category->term_id . '">';
-                echo '<input type="checkbox" name="category[]" value="' . $category->slug . '" id="Filter-category-' . $category->term_id . '">';
-                echo '<span class="box-check"></span>';
-                echo '<span>' . esc_html($category->name) . '</span>';
-                echo '</label>';
-                echo '</li>';
+                // Check if category has products
+                if ($category->count > 0) {
+                    echo '<li class="filter-item">';
+                    echo '<label for="Filter-category-' . $category->term_id . '">';
+                    echo '<input type="checkbox" name="category[]" value="' . $category->slug . '" id="Filter-category-' . $category->term_id . '">';
+                    echo '<span class="box-check"></span>';
+                    echo '<span>' . esc_html($category->name) . '</span>';
+                    echo '</label>';
+                    echo '</li>';
+                }
             }
         }
     }
@@ -406,10 +409,13 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         echo '</ul><div class="size-swatches">';
         if (!is_wp_error($sizes) && !empty($sizes)) {
             foreach ($sizes as $size) {
-                echo '<label class="size-swatch" for="Filter-size-' . $size->term_id . '">';
-                echo '<input type="checkbox" name="shoe_size[]" value="' . $size->slug . '" id="Filter-size-' . $size->term_id . '">';
-                echo '<span class="swatch-label">' . esc_html($size->name) . '</span>';
-                echo '</label>';
+                // Only show sizes that have products
+                if ($size->count > 0) {
+                    echo '<label class="size-swatch" for="Filter-size-' . $size->term_id . '">';
+                    echo '<input type="checkbox" name="shoe_size[]" value="' . $size->slug . '" id="Filter-size-' . $size->term_id . '">';
+                    echo '<span class="swatch-label">' . esc_html($size->name) . '</span>';
+                    echo '</label>';
+                }
             }
         } else {
             // Fallback with common shoe sizes if no taxonomy terms exist

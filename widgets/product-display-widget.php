@@ -353,7 +353,7 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
         <div class="product-image">
             <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>" class="main-image">
             <?php if ($hover_image): ?>
-                <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">
+            <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">
             <?php endif; ?>
         </div>
         <div class="product-info">

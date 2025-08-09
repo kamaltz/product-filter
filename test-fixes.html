@@ -20,21 +20,21 @@
                             <li class="filter-item filter-active">
                                 <label for="Filter-manual" class="filter-sort-by active">
                                     <span class="box-check"></span>
-                                    <input type="radio" name="sort_by_" value="manual" id="Filter-manual" checked>
+                                    <input type="checkbox" name="sort_by_" value="manual" id="Filter-manual" checked>
                                     <span>Featured</span>
                                 </label>
                             </li>
                             <li class="filter-item">
                                 <label for="Filter-newest" class="filter-sort-by">
                                     <span class="box-check"></span>
-                                    <input type="radio" name="sort_by_" value="newest" id="Filter-newest">
+                                    <input type="checkbox" name="sort_by_" value="newest" id="Filter-newest">
                                     <span>Newest first</span>
                                 </label>
                             </li>
                             <li class="filter-item">
                                 <label for="Filter-price-asc" class="filter-sort-by">
                                     <span class="box-check"></span>
-                                    <input type="radio" name="sort_by_" value="price_asc" id="Filter-price-asc">
+                                    <input type="checkbox" name="sort_by_" value="price_asc" id="Filter-price-asc">
                                     <span>Price: low to high</span>
                                 </label>
                             </li>
@@ -119,23 +119,40 @@
         </div>
     </div>
 
-    <!-- Pagination Test -->
+    <!-- Pagination Test - Exact Reference Match -->
     <div class="product-pagination">
         <button class="page-btn page-prev" data-page="1">
-            <svg width="8" height="14" viewBox="0 0 8 14" fill="none">
-                <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+                <path d="M5 1L1 5L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
         <button class="page-btn" data-page="1">1</button>
         <button class="page-btn active" data-page="2">2</button>
         <button class="page-btn" data-page="3">3</button>
+        <button class="page-btn" data-page="4">4</button>
         <span class="page-dots">...</span>
         <button class="page-btn" data-page="10">10</button>
         <button class="page-btn page-next" data-page="3">
-            <svg width="8" height="14" viewBox="0 0 8 14" fill="none">
-                <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
+                <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
+    </div>
+    
+    <!-- Product Card Test -->
+    <div style="margin-top: 50px; width: 300px;">
+        <div class="product-item">
+            <div class="product-image">
+                <img src="https://via.placeholder.com/300x375/f8f8f8/ccc?text=Main+Image" alt="Test Product" class="main-image">
+                <img src="https://via.placeholder.com/300x375/e8e8e8/999?text=Hover+Image" alt="Test Product" class="hover-image">
+            </div>
+            <div class="product-info">
+                <h3 class="product-title">Test Product</h3>
+                <div class="product-price">
+                    <span class="price-current">Rp 250.000</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>

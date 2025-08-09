@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Advanced Elementor widgets for product filtering and display with WooCommerce integration
- * Version: 2.1.0
+ * Version: 2.3.0
  * Author: Your Name
  */
 
@@ -354,8 +354,10 @@ class ProductFilterElementor {
         <?php endif; ?>
 
         <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>"
-            class="product-main-image" <?php if ($hover_image): ?> data-hover="<?php echo esc_url($hover_image); ?>"
-            <?php endif; ?>>
+            class="main-image">
+        <?php if ($hover_image): ?>
+        <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">
+        <?php endif; ?>
 
         <div class="product-overlay">
             <button class="product-quick-view" data-product-id="<?php echo $product_id; ?>">Quick View</button>
