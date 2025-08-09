@@ -34,12 +34,47 @@ jQuery(document).ready(function ($) {
   $('input[name="sort_by"]').on("change", function () {
     const sortValue = $(this).val();
     $(".sort-dropdown").val(sortValue);
+    
+    // Update visual state for sort items
+    $('.filter-sort-by').removeClass('active');
+    $(this).closest('label').addClass('active');
+    $(this).closest('.filter-item').addClass('filter-active').siblings().removeClass('filter-active');
+    
     applyFilters();
   });
 
   // Handle all filter changes
   $(document).on("change", ".filter-item input", function () {
     applyFilters();
+  });
+  
+  // Handle size swatch changes
+  $(document).on("change", ".size-swatch input", function () {
+    const $swatch = $(this).closest('.size-swatch');
+    if ($(this).is(':checked')) {
+      $swatch.addClass('active');
+    } else {
+      $swatch.removeClass('active');
+    }
+    applyFilters();
+  });
+  
+  // Handle size swatch clicks (for better UX)
+  $(document).on("click", ".size-swatch", function (e) {
+    if (e.target.type !== 'checkbox') {
+      const $checkbox = $(this).find('input[type="checkbox"]');
+      $checkbox.prop('checked', !$checkbox.prop('checked')).trigger('change');
+    }
+  });
+  
+  // Handle product type checkbox visual feedback
+  $(document).on("change", 'input[name="product_type[]"]', function () {
+    const $item = $(this).closest('.filter-item');
+    if ($(this).is(':checked')) {
+      $item.addClass('filter-active');
+    } else {
+      $item.removeClass('filter-active');
+    }
   });
 
   // Pagination functionality
@@ -195,13 +230,22 @@ jQuery(document).ready(function ($) {
       filters.price_ranges = priceRanges;
     }
 
-    // Collect size filters
+    // Collect size filters (including shoe sizes)
     const sizes = [];
-    $('input[name="size[]"]:checked').each(function () {
+    $('input[name="size[]"]:checked, input[name="shoe_size[]"]:checked').each(function () {
       sizes.push($(this).val());
     });
     if (sizes.length > 0) {
       filters.sizes = sizes;
+    }
+    
+    // Collect shoe size filters specifically
+    const shoeSizes = [];
+    $('input[name="shoe_size[]"]:checked').each(function () {
+      shoeSizes.push($(this).val());
+    });
+    if (shoeSizes.length > 0) {
+      filters.shoe_sizes = shoeSizes;
     }
 
     // Collect color filters
@@ -574,6 +618,26 @@ jQuery(document).ready(function ($) {
     };
   }
 
+  // Initialize visual states
+  function initializeVisualStates() {
+    // Set initial sort selection visual state
+    $('input[name="sort_by_"]:checked').each(function() {
+      $(this).closest('label').addClass('active');
+      $(this).closest('.filter-item').addClass('filter-active');
+    });
+    
+    // Set initial size swatch states
+    $('.size-swatch input:checked').each(function() {
+      $(this).closest('.size-swatch').addClass('active');
+    });
+    
+    // Set initial product type checkbox states
+    $('input[name="product_type[]"]:checked').each(function() {
+      $(this).closest('.filter-item').addClass('filter-active');
+    });
+  }
+  
   // Initialize on page load
   initializeFromURL();
+  initializeVisualStates();
 });

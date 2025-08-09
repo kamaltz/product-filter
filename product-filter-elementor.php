@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Advanced Elementor widgets for product filtering and display with WooCommerce integration
- * Version: 2.0.9
+ * Version: 2.1.0
  * Author: Your Name
  */
 
@@ -149,12 +149,27 @@ class ProductFilterElementor {
         }
         
         if (!empty($filters['sizes'])) {
-            $tax_query[] = [
-                'taxonomy' => 'pa_size',
-                'field' => 'slug',
-                'terms' => $filters['sizes'],
-                'operator' => 'IN'
-            ];
+            // Try different size taxonomies
+            $size_taxonomy = 'pa_size';
+            if (!taxonomy_exists($size_taxonomy)) {
+                $size_taxonomy = 'pa_shoe-size';
+            }
+            
+            if (taxonomy_exists($size_taxonomy)) {
+                $tax_query[] = [
+                    'taxonomy' => $size_taxonomy,
+                    'field' => 'slug',
+                    'terms' => $filters['sizes'],
+                    'operator' => 'IN'
+                ];
+            } else {
+                // Fallback to meta query for custom size fields
+                $meta_query[] = [
+                    'key' => '_shoe_size',
+                    'value' => $filters['sizes'],
+                    'compare' => 'IN'
+                ];
+            }
         }
         
         if (count($tax_query) > 1) {

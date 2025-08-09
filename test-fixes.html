@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Filter Test</title>
+    <link rel="stylesheet" href="assets/product-filter.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="filter-custom">
+        <div class="inner-filter">
+            <div class="inner-filter--app">
+                
+                <!-- Sort By Filter -->
+                <div class="filter-group active">
+                    <span class="filter-title filter-button">Sort by</span>
+                    <div class="filter-panel">
+                        <ul class="filter-size-group filter-list">
+                            <li class="filter-item filter-active">
+                                <label for="Filter-manual" class="filter-sort-by active">
+                                    <span class="box-check"></span>
+                                    <input type="radio" name="sort_by_" value="manual" id="Filter-manual" checked>
+                                    <span>Featured</span>
+                                </label>
+                            </li>
+                            <li class="filter-item">
+                                <label for="Filter-newest" class="filter-sort-by">
+                                    <span class="box-check"></span>
+                                    <input type="radio" name="sort_by_" value="newest" id="Filter-newest">
+                                    <span>Newest first</span>
+                                </label>
+                            </li>
+                            <li class="filter-item">
+                                <label for="Filter-price-asc" class="filter-sort-by">
+                                    <span class="box-check"></span>
+                                    <input type="radio" name="sort_by_" value="price_asc" id="Filter-price-asc">
+                                    <span>Price: low to high</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product Type Filter -->
+                <div class="filter-group active">
+                    <span class="filter-title filter-button">Product Type</span>
+                    <div class="filter-panel">
+                        <ul class="filter-size-group filter-list">
+                            <li class="filter-item">
+                                <label for="Filter-men">
+                                    <input type="checkbox" name="product_type[]" value="Men" id="Filter-men">
+                                    <span class="box-check"></span>
+                                    <span>Men</span>
+                                </label>
+                            </li>
+                            <li class="filter-item">
+                                <label for="Filter-women">
+                                    <input type="checkbox" name="product_type[]" value="Women" id="Filter-women">
+                                    <span class="box-check"></span>
+                                    <span>Women</span>
+                                </label>
+                            </li>
+                            <li class="filter-item">
+                                <label for="Filter-unisex">
+                                    <input type="checkbox" name="product_type[]" value="Unisex" id="Filter-unisex">
+                                    <span class="box-check"></span>
+                                    <span>Unisex</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Shoe Size Filter -->
+                <div class="filter-group active">
+                    <span class="filter-title filter-button">Shoe Size</span>
+                    <div class="filter-panel">
+                        <ul class="filter-list"></ul>
+                        <div class="size-swatches">
+                            <label class="size-swatch" for="Filter-size-7">
+                                <input type="checkbox" name="shoe_size[]" value="us-7" id="Filter-size-7">
+                                <span class="swatch-label">US 7</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-7-5">
+                                <input type="checkbox" name="shoe_size[]" value="us-7.5" id="Filter-size-7-5">
+                                <span class="swatch-label">US 7.5</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-8">
+                                <input type="checkbox" name="shoe_size[]" value="us-8" id="Filter-size-8">
+                                <span class="swatch-label">US 8</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-8-5">
+                                <input type="checkbox" name="shoe_size[]" value="us-8.5" id="Filter-size-8-5">
+                                <span class="swatch-label">US 8.5</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-9">
+                                <input type="checkbox" name="shoe_size[]" value="us-9" id="Filter-size-9">
+                                <span class="swatch-label">US 9</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-9-5">
+                                <input type="checkbox" name="shoe_size[]" value="us-9.5" id="Filter-size-9-5">
+                                <span class="swatch-label">US 9.5</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-10">
+                                <input type="checkbox" name="shoe_size[]" value="us-10" id="Filter-size-10">
+                                <span class="swatch-label">US 10</span>
+                            </label>
+                            <label class="size-swatch" for="Filter-size-10-5">
+                                <input type="checkbox" name="shoe_size[]" value="us-10.5" id="Filter-size-10-5">
+                                <span class="swatch-label">US 10.5</span>
+                            </label>
+                        </div>
+                        <ul class="filter-list" style="display:none;"></ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination Test -->
+    <div class="product-pagination">
+        <button class="page-btn page-prev" data-page="1">
+            <svg width="8" height="14" viewBox="0 0 8 14" fill="none">
+                <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <button class="page-btn" data-page="1">1</button>
+        <button class="page-btn active" data-page="2">2</button>
+        <button class="page-btn" data-page="3">3</button>
+        <span class="page-dots">...</span>
+        <button class="page-btn" data-page="10">10</button>
+        <button class="page-btn page-next" data-page="3">
+            <svg width="8" height="14" viewBox="0 0 8 14" fill="none">
+                <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // Test the filter functionality
+        $(document).ready(function() {
+            // Handle sort radio button change
+            $('input[name="sort_by_"]').on("change", function () {
+                const sortValue = $(this).val();
+                
+                // Update visual state for sort items
+                $('.filter-sort-by').removeClass('active');
+                $(this).closest('label').addClass('active');
+                $(this).closest('.filter-item').addClass('filter-active').siblings().removeClass('filter-active');
+                
+                console.log('Sort changed to:', sortValue);
+            });
+            
+            // Handle size swatch changes
+            $(document).on("change", ".size-swatch input", function () {
+                const $swatch = $(this).closest('.size-swatch');
+                if ($(this).is(':checked')) {
+                    $swatch.addClass('active');
+                } else {
+                    $swatch.removeClass('active');
+                }
+                console.log('Size changed:', $(this).val(), 'checked:', $(this).is(':checked'));
+            });
+            
+            // Handle size swatch clicks (for better UX)
+            $(document).on("click", ".size-swatch", function (e) {
+                if (e.target.type !== 'checkbox') {
+                    const $checkbox = $(this).find('input[type="checkbox"]');
+                    $checkbox.prop('checked', !$checkbox.prop('checked')).trigger('change');
+                }
+            });
+            
+            // Handle product type checkbox visual feedback
+            $(document).on("change", 'input[name="product_type[]"]', function () {
+                const $item = $(this).closest('.filter-item');
+                if ($(this).is(':checked')) {
+                    $item.addClass('filter-active');
+                } else {
+                    $item.removeClass('filter-active');
+                }
+                console.log('Product type changed:', $(this).val(), 'checked:', $(this).is(':checked'));
+            });
+            
+            // Filter accordion functionality
+            $(".filter-title").on("click", function () {
+                const $filterGroup = $(this).closest(".filter-group");
+                const $panel = $filterGroup.find(".filter-panel");
+
+                if ($filterGroup.hasClass("active")) {
+                    $filterGroup.removeClass("active");
+                    $panel.slideUp(300);
+                } else {
+                    $filterGroup.addClass("active");
+                    $panel.slideDown(300);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -130,17 +130,44 @@
   font-weight: bold;
 }
 
+/* Product type checkbox styling - square with thin border */
+.filter-item input[name="product_type[]"] + .box-check {
+  border: 1px solid #333;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.filter-item input[name="product_type[]"]:checked + .box-check {
+  background: #000;
+  border-color: #000;
+  position: relative;
+}
+
+.filter-item input[name="product_type[]"]:checked + .box-check:after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  margin: 1px;
+}
+
 /* Radio button styles for sort filter */
 .filter-sort-by .box-check {
   border-radius: 50%;
 }
 
-.filter-sort-by input:checked + .box-check {
+.filter-sort-by input:checked + .box-check,
+.filter-sort-by.active .box-check {
   background: #000;
   border-color: #000;
 }
 
-.filter-sort-by input:checked + .box-check:after {
+.filter-sort-by input:checked + .box-check:after,
+.filter-sort-by.active .box-check:after {
   content: "";
   width: 6px;
   height: 6px;
@@ -150,6 +177,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.filter-item.filter-active .filter-sort-by {
+  color: #000;
+  font-weight: 600;
 }
 
 /* Size filter grid layout */
@@ -227,6 +259,32 @@
 .size-swatch.active {
   background: #000;
   color: #fff;
+  border-color: #000;
+}
+
+.size-swatch input:checked {
+  background: #000;
+}
+
+.size-swatch:has(input:checked) {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.size-swatch input:checked + .swatch-label,
+.size-swatch input:checked ~ .swatch-label {
+  color: #fff;
+}
+
+/* Fallback for browsers that don't support :has() */
+.size-swatch input:checked {
+  background: #000;
+}
+
+.size-swatch input:checked + .swatch-label {
+  background: #000;
+  color: #fff;
 }
 
 .swatch-label {
@@ -234,6 +292,7 @@
   width: 100%;
   font-weight: 500;
   transition: all 0.3s ease;
+  pointer-events: none;
 }
 
 /* Product Display Styles - Enhanced */
@@ -467,46 +526,39 @@
   background: #e74c3c;
 }
 
-/* Enhanced Pagination Styles */
+/* Enhanced Pagination Styles - Matching Reference Website */
 .product-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0;
+  gap: 8px;
   margin-top: 60px;
   padding-top: 40px;
   border-top: 1px solid #e5e5e5;
 }
 
 .page-btn {
-  padding: 12px 16px;
-  border: 1px solid #e5e5e5;
-  border-right: none;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
   background: #fff;
-  color: #666;
+  color: #333;
   cursor: pointer;
   font-size: 14px;
   font-weight: 400;
-  transition: all 0.3s ease;
-  min-width: 48px;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  height: 40px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-}
-
-.page-btn:first-child {
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-
-.page-btn:last-child {
-  border-right: 1px solid #e5e5e5;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
 }
 
 .page-btn:hover {
   background: #f8f8f8;
+  border-color: #bbb;
   color: #000;
 }
 
@@ -514,20 +566,28 @@
   background: #000;
   color: #fff;
   border-color: #000;
-  z-index: 1;
-  position: relative;
+  font-weight: 500;
 }
 
 .page-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   background: #f5f5f5;
+  color: #999;
 }
 
 .page-prev,
 .page-next {
-  padding: 12px;
-  min-width: 48px;
+  padding: 10px 12px;
+  min-width: 40px;
+  font-weight: 500;
+}
+
+.page-prev:hover,
+.page-next:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
 }
 
 .page-prev svg,
@@ -538,10 +598,12 @@
 
 .page-dots {
   color: #666;
-  padding: 0 8px;
+  padding: 0 4px;
   user-select: none;
   border: none;
   background: none;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .no-products {

@@ -408,7 +408,16 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
             foreach ($sizes as $size) {
                 echo '<label class="size-swatch" for="Filter-size-' . $size->term_id . '">';
                 echo '<input type="checkbox" name="shoe_size[]" value="' . $size->slug . '" id="Filter-size-' . $size->term_id . '">';
-                echo '<span class="swatch-label">' . $size->name . '</span>';
+                echo '<span class="swatch-label">' . esc_html($size->name) . '</span>';
+                echo '</label>';
+            }
+        } else {
+            // Fallback with common shoe sizes if no taxonomy terms exist
+            $common_sizes = ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12'];
+            foreach ($common_sizes as $size) {
+                echo '<label class="size-swatch" for="Filter-size-common-' . str_replace('.', '-', $size) . '">';
+                echo '<input type="checkbox" name="shoe_size[]" value="us-' . $size . '" id="Filter-size-common-' . str_replace('.', '-', $size) . '">';
+                echo '<span class="swatch-label">US ' . $size . '</span>';
                 echo '</label>';
             }
         }
