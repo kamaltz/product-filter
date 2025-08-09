@@ -307,24 +307,38 @@
 .product-image {
   position: relative;
   width: 100%;
-  padding-bottom: 125%;
+  padding-bottom: 100%;
   overflow: hidden;
-  background: #f8f8f8;
-  border-radius: 8px 8px 0 0;
+  background: #F9F6F7;
 }
 
-.product-image img {
+.product-image .main-image {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.4s ease;
+  transition: opacity 0.3s ease;
 }
 
-.product-item:hover .product-image img {
-  transform: scale(1.08);
+.product-image .hover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-item:hover .hover-image {
+  opacity: 1;
+}
+
+.product-item:hover .main-image {
+  opacity: 0;
 }
 
 /* Hover image effect */
@@ -458,49 +472,62 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   margin-top: 60px;
-  padding-top: 30px;
-  border-top: 1px solid #eee;
+  padding-top: 40px;
+  border-top: 1px solid #e5e5e5;
 }
 
 .page-btn {
   padding: 12px 16px;
   border: 1px solid #e5e5e5;
+  border-right: none;
   background: #fff;
   color: #666;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   transition: all 0.3s ease;
-  min-width: 44px;
+  min-width: 48px;
   text-align: center;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.page-btn:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.page-btn:last-child {
+  border-right: 1px solid #e5e5e5;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .page-btn:hover {
   background: #f8f8f8;
-  border-color: #ccc;
+  color: #000;
 }
 
 .page-btn.active {
   background: #000;
   color: #fff;
   border-color: #000;
+  z-index: 1;
+  position: relative;
 }
 
 .page-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background: #f5f5f5;
 }
 
 .page-prev,
 .page-next {
   padding: 12px;
-  min-width: 44px;
+  min-width: 48px;
 }
 
 .page-prev svg,
@@ -513,6 +540,8 @@
   color: #666;
   padding: 0 8px;
   user-select: none;
+  border: none;
+  background: none;
 }
 
 .no-products {
@@ -649,4 +678,16 @@
     padding: 8px;
     min-width: 36px;
   }
+}
+
+/* Product Link Styling */
+.product-item a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-item a:hover {
+  text-decoration: none;
+  color: inherit;
 }

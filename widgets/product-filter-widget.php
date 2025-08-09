@@ -79,7 +79,7 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
                     ],
                     [
                         'filter_type' => 'sizes',
-                        'filter_title' => 'US shoe size',
+                        'filter_title' => 'Shoe size',
                         'is_active' => 'yes',
                         'default_open' => 'no',
                     ],
@@ -318,25 +318,45 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
     }
     
     private function render_brands_filter() {
-        $brands = get_terms([
-            'taxonomy' => 'pa_brand',
-            'hide_empty' => true,
-        ]);
+        global $wpdb;
         
-        if (is_wp_error($brands) || empty($brands)) {
-            $brands = get_terms([
-                'taxonomy' => 'product_brand',
+        // Get brands from WooCommerce products
+        $brands = $wpdb->get_results(
+            "SELECT DISTINCT meta_value as brand_name 
+             FROM {$wpdb->postmeta} pm
+             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+             WHERE pm.meta_key = '_product_brand' 
+             AND pm.meta_value != ''
+             AND p.post_type = 'product'
+             AND p.post_status = 'publish'
+             ORDER BY pm.meta_value ASC"
+        );
+        
+        // Fallback to taxonomy if meta field doesn't exist
+        if (empty($brands)) {
+            $brand_terms = get_terms([
+                'taxonomy' => 'pa_brand',
                 'hide_empty' => true,
             ]);
-        }
-        
-        if (!is_wp_error($brands) && !empty($brands)) {
+            
+            if (!is_wp_error($brand_terms) && !empty($brand_terms)) {
+                foreach ($brand_terms as $brand) {
+                    echo '<li class="filter-item">';
+                    echo '<label for="Filter-brand-' . $brand->term_id . '">';
+                    echo '<input type="checkbox" name="brand[]" value="' . $brand->slug . '" id="Filter-brand-' . $brand->term_id . '">';
+                    echo '<span class="box-check"></span>';
+                    echo '<span>' . esc_html($brand->name) . '</span>';
+                    echo '</label>';
+                    echo '</li>';
+                }
+            }
+        } else {
             foreach ($brands as $brand) {
                 echo '<li class="filter-item">';
-                echo '<label for="Filter-brand-' . $brand->term_id . '">';
-                echo '<input type="checkbox" name="brand[]" value="' . $brand->slug . '" id="Filter-brand-' . $brand->term_id . '">';
+                echo '<label for="Filter-brand-' . sanitize_title($brand->brand_name) . '">';
+                echo '<input type="checkbox" name="brand[]" value="' . esc_attr($brand->brand_name) . '" id="Filter-brand-' . sanitize_title($brand->brand_name) . '">';
                 echo '<span class="box-check"></span>';
-                echo '<span>' . esc_html($brand->name) . '</span>';
+                echo '<span>' . esc_html($brand->brand_name) . '</span>';
                 echo '</label>';
                 echo '</li>';
             }
@@ -371,14 +391,26 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
     }
     
     private function render_sizes_filter() {
-        $sizes = ['5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '12.5', '13'];
+        $sizes = get_terms([
+            'taxonomy' => 'pa_size',
+            'hide_empty' => true,
+        ]);
+        
+        if (is_wp_error($sizes) || empty($sizes)) {
+            $sizes = get_terms([
+                'taxonomy' => 'pa_shoe-size',
+                'hide_empty' => true,
+            ]);
+        }
         
         echo '</ul><div class="size-swatches">';
-        foreach ($sizes as $size) {
-            echo '<label class="size-swatch" for="Filter-size-' . str_replace('.', '-', $size) . '">';
-            echo '<input type="checkbox" name="shoe_size[]" value="' . $size . '" id="Filter-size-' . str_replace('.', '-', $size) . '">';
-            echo '<span class="swatch-label">US ' . $size . '</span>';
-            echo '</label>';
+        if (!is_wp_error($sizes) && !empty($sizes)) {
+            foreach ($sizes as $size) {
+                echo '<label class="size-swatch" for="Filter-size-' . $size->term_id . '">';
+                echo '<input type="checkbox" name="shoe_size[]" value="' . $size->slug . '" id="Filter-size-' . $size->term_id . '">';
+                echo '<span class="swatch-label">' . $size->name . '</span>';
+                echo '</label>';
+            }
         }
         echo '</div><ul class="filter-list" style="display:none;">';
     }

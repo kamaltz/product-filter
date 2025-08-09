@@ -343,66 +343,33 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
         $is_new = (time() - strtotime($post->post_date)) < (30 * 24 * 60 * 60);
         $on_sale = !empty($sale_price) && $sale_price < $regular_price;
         
-        // Get product gallery for hover effect
-        $attachment_ids = get_post_meta($product_id, '_product_image_gallery', true);
-        $hover_image = '';
-        if ($attachment_ids) {
-            $attachment_ids = explode(',', $attachment_ids);
-            if (!empty($attachment_ids[0])) {
-                $hover_image = wp_get_attachment_image_url($attachment_ids[0], 'medium');
-            }
-        }
+        // Get WooCommerce product for gallery
+        $product = wc_get_product($product_id);
+        $gallery_ids = $product ? $product->get_gallery_image_ids() : [];
+        $hover_image = !empty($gallery_ids) ? wp_get_attachment_image_url($gallery_ids[0], 'medium') : '';
         ?>
 <div class="product-item" data-product-id="<?php echo $product_id; ?>">
-    <div class="product-image">
-        <?php if ($is_new): ?>
-        <div class="product-badge product-badge-new">New</div>
-        <?php elseif ($on_sale): ?>
-        <div class="product-badge product-badge-sale">Sale</div>
-        <?php endif; ?>
-
-        <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>"
-            class="product-main-image" <?php if ($hover_image): ?> data-hover="<?php echo esc_url($hover_image); ?>"
-            <?php endif; ?>>
-
-        <div class="product-overlay">
-            <button class="product-quick-view" data-product-id="<?php echo $product_id; ?>">Quick View</button>
-            <button class="product-add-to-cart" data-product-id="<?php echo $product_id; ?>">Add to Cart</button>
-        </div>
-    </div>
-    <div class="product-info">
-        <h3 class="product-title"><?php the_title(); ?></h3>
-        <div class="product-price">
-            <?php if ($on_sale && $regular_price): ?>
-            <span class="price-sale">Rp <?php echo number_format($sale_price, 0, ',', '.'); ?></span>
-            <span class="price-regular">Rp <?php echo number_format($regular_price, 0, ',', '.'); ?></span>
-            <?php elseif ($price): ?>
-            <span class="price-current">Rp <?php echo number_format($price, 0, ',', '.'); ?></span>
-            <?php else: ?>
-            <span class="price-contact">Contact for Price</span>
+    <a href="<?php echo esc_url(get_permalink($product_id)); ?>" class="product-link">
+        <div class="product-image">
+            <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>" class="main-image">
+            <?php if ($hover_image): ?>
+                <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">
             <?php endif; ?>
         </div>
-
-        <?php if ($product_type): ?>
-        <div class="product-type"><?php echo esc_html($product_type); ?></div>
-        <?php endif; ?>
-
-        <!-- Color swatches if available -->
-        <?php
-                $colors = get_the_terms($product_id, 'pa_color');
-                if ($colors && !is_wp_error($colors)):
-                ?>
-        <div class="product-colors">
-            <?php foreach (array_slice($colors, 0, 4) as $color): ?>
-            <span class="color-swatch" style="background-color: <?php echo esc_attr(strtolower($color->name)); ?>;"
-                title="<?php echo esc_attr($color->name); ?>"></span>
-            <?php endforeach; ?>
-            <?php if (count($colors) > 4): ?>
-            <span class="color-more">+<?php echo count($colors) - 4; ?></span>
-            <?php endif; ?>
+        <div class="product-info">
+            <h3 class="product-title"><?php echo ucwords(strtolower(get_the_title())); ?></h3>
+            <div class="product-price">
+                <?php if ($on_sale && $regular_price): ?>
+                <span class="price-sale">Rp <?php echo number_format($sale_price, 0, ',', '.'); ?></span>
+                <span class="price-regular">Rp <?php echo number_format($regular_price, 0, ',', '.'); ?></span>
+                <?php elseif ($price): ?>
+                <span class="price-current">Rp <?php echo number_format($price, 0, ',', '.'); ?></span>
+                <?php else: ?>
+                <span class="price-contact">Contact for Price</span>
+                <?php endif; ?>
+            </div>
         </div>
-        <?php endif; ?>
-    </div>
+    </a>
 </div>
 <?php
     }
