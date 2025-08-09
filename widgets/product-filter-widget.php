@@ -304,6 +304,21 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
             ]
         );
         
+        $this->add_control(
+            'sticky_filter',
+            [
+                'label' => 'Sticky Filter',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'none',
+                'options' => [
+                    'none' => 'None',
+                    'both' => 'Desktop & Mobile',
+                    'desktop' => 'Desktop Only',
+                    'mobile' => 'Mobile Only',
+                ],
+            ]
+        );
+        
         $this->end_controls_section();
     }
     
@@ -324,7 +339,7 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
     </button>
 </div>
 <?php endif; ?>
-<div class="filter-custom <?php echo $mobile_toggle ? 'mobile-hidden' : ''; ?>">
+<div class="filter-custom <?php echo $mobile_toggle ? 'mobile-hidden' : ''; ?> sticky-<?php echo esc_attr($settings['sticky_filter'] ?: 'none'); ?>">
     <div class="inner-filter">
         <div class="inner-filter--app">
             <?php if ($mobile_toggle): ?>

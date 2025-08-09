@@ -59,10 +59,10 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
             ]
         );
         
-        $this->add_responsive_control(
-            'columns',
+        $this->add_control(
+            'desktop_columns',
             [
-                'label' => 'Columns',
+                'label' => 'Desktop Columns',
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => '4',
                 'options' => [
@@ -75,6 +75,20 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
                 ],
                 'selectors' => [
                     '{{WRAPPER}} .products-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr);',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'mobile_columns',
+            [
+                'label' => 'Mobile Columns',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '2',
+                'options' => [
+                    '1' => '1',
+                    '2' => '2',
+                    '3' => '3',
                 ],
             ]
         );
@@ -218,6 +232,30 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
                 ],
                 'selectors' => [
                     '{{WRAPPER}} .product-pagination' => 'gap: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_border_bottom',
+            [
+                'label' => 'Border Bottom',
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'default' => 'no',
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_border_color_bottom',
+            [
+                'label' => 'Border Bottom Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '#e5e5e5',
+                'selectors' => [
+                    '{{WRAPPER}} .page-btn' => 'border-bottom: 2px solid {{VALUE}};',
+                ],
+                'condition' => [
+                    'pagination_border_bottom' => 'yes',
                 ],
             ]
         );
@@ -378,7 +416,7 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
     </div>
     <?php endif; ?>
 
-    <div class="products-grid" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
+    <div class="products-grid desktop-cols-<?php echo esc_attr($settings['desktop_columns']); ?> mobile-cols-<?php echo esc_attr($settings['mobile_columns']); ?>" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
         <?php
                 if ($query->have_posts()) {
                     while ($query->have_posts()) {
@@ -393,7 +431,7 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
     </div>
 
     <?php if ($settings['show_pagination'] === 'yes' && $query->max_num_pages > 1): ?>
-    <div class="product-pagination pagination-<?php echo esc_attr($settings['pagination_style']); ?>">
+    <div class="product-pagination pagination-<?php echo esc_attr($settings['pagination_style']); ?> <?php echo $settings['pagination_border_bottom'] === 'yes' ? 'has-border-bottom' : ''; ?>">
         <?php
                 $current_page = max(1, get_query_var('paged', 1));
                 $max_pages = $query->max_num_pages;
