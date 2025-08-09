@@ -200,6 +200,111 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         );
         
         $this->end_controls_section();
+        
+        // Typography Section
+        $this->start_controls_section(
+            'typography_section',
+            [
+                'label' => 'Typography',
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'filter_title_typography',
+                'label' => 'Filter Title Typography',
+                'selector' => '{{WRAPPER}} .filter-title',
+            ]
+        );
+        
+        $this->add_control(
+            'filter_title_color',
+            [
+                'label' => 'Filter Title Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .filter-title' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'filter_item_typography',
+                'label' => 'Filter Item Typography',
+                'selector' => '{{WRAPPER}} .filter-item label span:last-child',
+            ]
+        );
+        
+        $this->add_control(
+            'filter_item_color',
+            [
+                'label' => 'Filter Item Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .filter-item label' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'filter_item_active_color',
+            [
+                'label' => 'Filter Item Active Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .filter-item.filter-active label' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .filter-item input:checked + .box-check + span' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'size_swatch_typography',
+                'label' => 'Size Swatch Typography',
+                'selector' => '{{WRAPPER}} .size-swatch .swatch-label',
+            ]
+        );
+        
+        $this->end_controls_section();
+        
+        // Mobile Settings
+        $this->start_controls_section(
+            'mobile_section',
+            [
+                'label' => 'Mobile Settings',
+                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
+            ]
+        );
+        
+        $this->add_control(
+            'mobile_filter_toggle',
+            [
+                'label' => 'Mobile Filter Toggle',
+                'type' => \Elementor\Controls_Manager::SWITCHER,
+                'default' => 'yes',
+                'description' => 'Show filter toggle button on mobile',
+            ]
+        );
+        
+        $this->add_control(
+            'mobile_filter_text',
+            [
+                'label' => 'Filter Button Text',
+                'type' => \Elementor\Controls_Manager::TEXT,
+                'default' => 'Filter',
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                ],
+            ]
+        );
+        
+        $this->end_controls_section();
     }
     
     protected function render() {
