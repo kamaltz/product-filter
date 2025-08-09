@@ -311,10 +311,32 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         $settings = $this->get_settings_for_display();
         $filter_order = $settings['filter_order'];
         $price_ranges = $settings['price_ranges'];
+        $mobile_toggle = $settings['mobile_filter_toggle'] === 'yes';
+        $filter_text = $settings['mobile_filter_text'] ?: 'Filter';
         ?>
-<div class="filter-custom">
+<?php if ($mobile_toggle): ?>
+<div class="mobile-filter-toggle">
+    <button class="filter-toggle-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 6H16M4 10H16M4 14H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <?php echo esc_html($filter_text); ?>
+    </button>
+</div>
+<?php endif; ?>
+<div class="filter-custom <?php echo $mobile_toggle ? 'mobile-hidden' : ''; ?>">
     <div class="inner-filter">
         <div class="inner-filter--app">
+            <?php if ($mobile_toggle): ?>
+            <div class="mobile-filter-header">
+                <h3>Filters</h3>
+                <button class="filter-close-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <?php endif; ?>
 
             <?php foreach ($filter_order as $filter): ?>
             <?php if ($filter['is_active'] === 'yes'): ?>

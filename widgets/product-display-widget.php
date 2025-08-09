@@ -110,6 +110,118 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
             ]
         );
         
+        $this->add_control(
+            'pagination_style',
+            [
+                'label' => 'Pagination Style',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'default',
+                'options' => [
+                    'default' => 'Default',
+                    'rounded' => 'Rounded',
+                    'square' => 'Square',
+                    'minimal' => 'Minimal',
+                ],
+                'condition' => [
+                    'show_pagination' => 'yes',
+                ],
+            ]
+        );
+        
+        $this->end_controls_section();
+        
+        // Pagination Style Section
+        $this->start_controls_section(
+            'pagination_style_section',
+            [
+                'label' => 'Pagination Style',
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+                'condition' => [
+                    'show_pagination' => 'yes',
+                ],
+            ]
+        );
+        
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name' => 'pagination_typography',
+                'selector' => '{{WRAPPER}} .page-btn',
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_color',
+            [
+                'label' => 'Text Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .page-btn' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_bg_color',
+            [
+                'label' => 'Background Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .page-btn' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_border_color',
+            [
+                'label' => 'Border Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .page-btn' => 'border-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_active_color',
+            [
+                'label' => 'Active Text Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .page-btn.active' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'pagination_active_bg',
+            [
+                'label' => 'Active Background',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .page-btn.active' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+        
+        $this->add_responsive_control(
+            'pagination_spacing',
+            [
+                'label' => 'Button Spacing',
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 20,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .product-pagination' => 'gap: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+        
         $this->end_controls_section();
         
         // Style Section
@@ -281,7 +393,7 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
     </div>
 
     <?php if ($settings['show_pagination'] === 'yes' && $query->max_num_pages > 1): ?>
-    <div class="product-pagination">
+    <div class="product-pagination pagination-<?php echo esc_attr($settings['pagination_style']); ?>">
         <?php
                 $current_page = max(1, get_query_var('paged', 1));
                 $max_pages = $query->max_num_pages;

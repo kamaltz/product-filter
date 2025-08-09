@@ -637,6 +637,25 @@ jQuery(document).ready(function ($) {
     });
   }
   
+  // Mobile filter toggle
+  $(document).on('click', '.filter-toggle-btn', function() {
+    $('.filter-custom.mobile-hidden').addClass('show');
+    $('body').addClass('filter-open');
+  });
+  
+  $(document).on('click', '.filter-close-btn', function() {
+    $('.filter-custom.mobile-hidden').removeClass('show');
+    $('body').removeClass('filter-open');
+  });
+  
+  // Close filter on overlay click
+  $(document).on('click', '.filter-custom.mobile-hidden', function(e) {
+    if (e.target === this) {
+      $(this).removeClass('show');
+      $('body').removeClass('filter-open');
+    }
+  });
+  
   // Initialize on page load
   initializeFromURL();
   initializeVisualStates();
