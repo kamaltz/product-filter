@@ -25,46 +25,124 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         $this->start_controls_section(
             'content_section',
             [
-                'label' => 'Content',
+                'label' => 'Filter Configuration',
                 'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
         
-
-        
         $this->add_control(
-            'show_sort_filter',
+            'filter_order',
             [
-                'label' => 'Show Sort By',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
+                'label' => 'Filter Order & Visibility',
+                'type' => \Elementor\Controls_Manager::REPEATER,
+                'fields' => [
+                    [
+                        'name' => 'filter_type',
+                        'label' => 'Filter Type',
+                        'type' => \Elementor\Controls_Manager::SELECT,
+                        'options' => [
+                            'sort_by' => 'Sort By',
+                            'categories' => 'Product Categories',
+                            'brands' => 'Brands (WooCommerce)',
+                            'price_range' => 'Price Range',
+                            'product_type' => 'Product Type',
+                            'sizes' => 'Sizes',
+                            'colors' => 'Colors',
+                        ],
+                        'default' => 'sort_by',
+                    ],
+                    [
+                        'name' => 'filter_title',
+                        'label' => 'Custom Title',
+                        'type' => \Elementor\Controls_Manager::TEXT,
+                        'placeholder' => 'Leave empty for default title',
+                    ],
+                    [
+                        'name' => 'is_active',
+                        'label' => 'Show Filter',
+                        'type' => \Elementor\Controls_Manager::SWITCHER,
+                        'default' => 'yes',
+                    ],
+                    [
+                        'name' => 'default_open',
+                        'label' => 'Open by Default',
+                        'type' => \Elementor\Controls_Manager::SWITCHER,
+                        'default' => 'no',
+                    ],
+                ],
+                'default' => [
+                    [
+                        'filter_type' => 'sort_by',
+                        'filter_title' => 'Sort by',
+                        'is_active' => 'yes',
+                        'default_open' => 'yes',
+                    ],
+                    [
+                        'filter_type' => 'categories',
+                        'filter_title' => 'Product Type',
+                        'is_active' => 'yes',
+                        'default_open' => 'no',
+                    ],
+                    [
+                        'filter_type' => 'brands',
+                        'filter_title' => 'Brand',
+                        'is_active' => 'yes',
+                        'default_open' => 'no',
+                    ],
+                    [
+                        'filter_type' => 'price_range',
+                        'filter_title' => 'Price',
+                        'is_active' => 'yes',
+                        'default_open' => 'no',
+                    ],
+                ],
+                'title_field' => '{{{ filter_title || filter_type }}}',
+            ]
+        );
+        
+        $this->end_controls_section();
+        
+        // Price Range Section
+        $this->start_controls_section(
+            'price_range_section',
+            [
+                'label' => 'Price Range Settings',
+                'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
             ]
         );
         
         $this->add_control(
-            'show_gender_filter',
+            'price_ranges',
             [
-                'label' => 'Show Shop For (Gender)',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
-            ]
-        );
-        
-        $this->add_control(
-            'show_size_filter',
-            [
-                'label' => 'Show Size Filter',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
-            ]
-        );
-        
-        $this->add_control(
-            'show_brand_filter',
-            [
-                'label' => 'Show Brand Filter',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
+                'label' => 'Price Ranges',
+                'type' => \Elementor\Controls_Manager::REPEATER,
+                'fields' => [
+                    [
+                        'name' => 'price_label',
+                        'label' => 'Price Label',
+                        'type' => \Elementor\Controls_Manager::TEXT,
+                        'placeholder' => 'e.g., Under Rp 100,000',
+                    ],
+                    [
+                        'name' => 'price_min',
+                        'label' => 'Min Price',
+                        'type' => \Elementor\Controls_Manager::NUMBER,
+                        'default' => 0,
+                    ],
+                    [
+                        'name' => 'price_max',
+                        'label' => 'Max Price',
+                        'type' => \Elementor\Controls_Manager::NUMBER,
+                        'default' => 999999999,
+                    ],
+                ],
+                'default' => [
+                    ['price_label' => 'Under Rp 200,000', 'price_min' => 0, 'price_max' => 200000],
+                    ['price_label' => 'Rp 200,000 - Rp 500,000', 'price_min' => 200000, 'price_max' => 500000],
+                    ['price_label' => 'Rp 500,000 - Rp 1,000,000', 'price_min' => 500000, 'price_max' => 1000000],
+                    ['price_label' => 'Above Rp 1,000,000', 'price_min' => 1000000, 'price_max' => 999999999],
+                ],
+                'title_field' => '{{{ price_label }}}',
             ]
         );
         
@@ -86,7 +164,7 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'default' => '#ffffff',
                 'selectors' => [
-                    '{{WRAPPER}} .product-filter' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .filter-custom' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -98,7 +176,7 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
                 'type' => \Elementor\Controls_Manager::COLOR,
                 'default' => '#333333',
                 'selectors' => [
-                    '{{WRAPPER}} .product-filter' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .filter-custom' => 'color: {{VALUE}};',
                 ],
             ]
         );
@@ -110,7 +188,7 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
                 'type' => \Elementor\Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%', 'em'],
                 'selectors' => [
-                    '{{WRAPPER}} .product-filter' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .filter-custom' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -120,134 +198,221 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
     
     protected function render() {
         $settings = $this->get_settings_for_display();
+        $filter_order = $settings['filter_order'];
+        $price_ranges = $settings['price_ranges'];
         ?>
-        <div class="filter-custom">
-            <div class="inner-filter">
-                <div class="inner-filter--app">
-                    
-                    <?php if ($settings['show_sort_filter'] === 'yes'): ?>
-                    <div class="filter-group">
-                        <span class="filter-title filter-button filter-active">Sort by</span>
-                        <div class="filter-panel">
-                            <ul class="filter-size-group filter-list">
-                                <li class="filter-item filter-active">
-                                    <label for="Filter-manual" class="active-true filter-sort-by">
-                                        <span class="box-check"></span>
-                                        <input type="radio" name="sort_by_" value="manual" id="Filter-manual" checked>
-                                        <span>Featured</span>
-                                    </label>
-                                </li>
-                                <li class="filter-item">
-                                    <label for="Filter-created-descending" class="filter-sort-by">
-                                        <span class="box-check"></span>
-                                        <input type="radio" name="sort_by_" value="created-descending" id="Filter-created-descending">
-                                        <span>Newest first</span>
-                                    </label>
-                                </li>
-                                <li class="filter-item">
-                                    <label for="Filter-price-ascending" class="filter-sort-by">
-                                        <span class="box-check"></span>
-                                        <input type="radio" name="sort_by_" value="price-ascending" id="Filter-price-ascending">
-                                        <span>Price: low to high</span>
-                                    </label>
-                                </li>
-                                <li class="filter-item">
-                                    <label for="Filter-price-descending" class="filter-sort-by">
-                                        <span class="box-check"></span>
-                                        <input type="radio" name="sort_by_" value="price-descending" id="Filter-price-descending">
-                                        <span>Price: high to low</span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($settings['show_gender_filter'] === 'yes'): ?>
-                    <div class="filter-group">
-                        <span class="filter-title filter-button filter-active">Shop For</span>
-                        <div class="filter-panel">
-                            <ul class="filter-size-group filter-list">
-                                <li class="filter-item">
-                                    <label for="Filter-women">
-                                        <input type="checkbox" name="filter.p.product_type" value="Women" id="Filter-women">
-                                        <span class="box-check"></span>
-                                        <span>Women</span>
-                                    </label>
-                                </li>
-                                <li class="filter-item">
-                                    <label for="Filter-men">
-                                        <input type="checkbox" name="filter.p.product_type" value="Men" id="Filter-men">
-                                        <span class="box-check"></span>
-                                        <span>Men</span>
-                                    </label>
-                                </li>
-                                <li class="filter-item">
-                                    <label for="Filter-unisex">
-                                        <input type="checkbox" name="filter.p.product_type" value="Unisex" id="Filter-unisex">
-                                        <span class="box-check"></span>
-                                        <span>Unisex</span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($settings['show_size_filter'] === 'yes'): ?>
-                    <div class="filter-group size-footwear-women-true">
-                        <span class="filter-title filter-button filter-active">US Women's shoe size</span>
-                        <div class="filter-panel">
-                            <ul class="filter-size-group filter-list ukuran-sepatu">
-                                <?php for ($i = 5; $i <= 10; $i += 0.5): ?>
-                                <li class="filter-item" data-sort="US <?php echo $i; ?>">
-                                    <label for="Filter-size-women-<?php echo str_replace('.', '-', $i); ?>">
-                                        <input type="checkbox" name="filter.p.tag" value="size-US <?php echo $i; ?>-women-footwear" id="Filter-size-women-<?php echo str_replace('.', '-', $i); ?>">
-                                        <span>US <?php echo $i; ?></span>
-                                    </label>
-                                </li>
-                                <?php endfor; ?>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="filter-group size-footwear-men-true">
-                        <span class="filter-title filter-button filter-active">US Men's shoe size</span>
-                        <div class="filter-panel">
-                            <ul class="filter-size-group filter-list ukuran-sepatu">
-                                <?php for ($i = 7; $i <= 13; $i += 0.5): ?>
-                                <li class="filter-item" data-sort="US <?php echo $i; ?>">
-                                    <label for="Filter-size-men-<?php echo str_replace('.', '-', $i); ?>">
-                                        <input type="checkbox" name="filter.p.tag" value="size-US <?php echo $i; ?>-men-footwear" id="Filter-size-men-<?php echo str_replace('.', '-', $i); ?>">
-                                        <span>US <?php echo $i; ?></span>
-                                    </label>
-                                </li>
-                                <?php endfor; ?>
-                            </ul>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($settings['show_brand_filter'] === 'yes'): ?>
-                    <div class="filter-group">
-                        <span class="filter-title filter-button filter-active">Brand</span>
-                        <div class="filter-panel">
-                            <ul class="filter-size-group filter-list">
-                                <li class="filter-item">
-                                    <label for="Filter-brand-on">
-                                        <input type="checkbox" name="filter.p.vendor" value="On" id="Filter-brand-on">
-                                        <span class="box-check"></span>
-                                        <span>On</span>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                </div>
-            </div>
+<div class="filter-custom">
+    <div class="inner-filter">
+        <div class="inner-filter--app">
+
+            <?php foreach ($filter_order as $filter): ?>
+            <?php if ($filter['is_active'] === 'yes'): ?>
+            <?php $this->render_filter_group($filter, $price_ranges); ?>
+            <?php endif; ?>
+            <?php endforeach; ?>
+
         </div>
-        <?php
+    </div>
+</div>
+<?php
+    }
+    
+    private function render_filter_group($filter, $price_ranges) {
+        $filter_type = $filter['filter_type'];
+        $title = !empty($filter['filter_title']) ? $filter['filter_title'] : $this->get_default_title($filter_type);
+        $default_open = $filter['default_open'] === 'yes' ? 'active' : '';
+        
+        echo '<div class="filter-group ' . $default_open . '">';
+        echo '<span class="filter-title filter-button">' . esc_html($title) . '</span>';
+        echo '<div class="filter-panel">';
+        echo '<ul class="filter-size-group filter-list">';
+        
+        switch ($filter_type) {
+            case 'sort_by':
+                $this->render_sort_filter();
+                break;
+            case 'categories':
+                $this->render_categories_filter();
+                break;
+            case 'brands':
+                $this->render_brands_filter();
+                break;
+            case 'price_range':
+                $this->render_price_range_filter($price_ranges);
+                break;
+            case 'product_type':
+                $this->render_product_type_filter();
+                break;
+            case 'sizes':
+                $this->render_sizes_filter();
+                break;
+            case 'colors':
+                $this->render_colors_filter();
+                break;
+        }
+        
+        echo '</ul>';
+        echo '</div>';
+        echo '</div>';
+    }
+    
+    private function get_default_title($filter_type) {
+        $titles = [
+            'sort_by' => 'Sort by',
+            'categories' => 'Categories',
+            'brands' => 'Brand',
+            'price_range' => 'Price',
+            'product_type' => 'Product Type',
+            'sizes' => 'Size',
+            'colors' => 'Color',
+        ];
+        return isset($titles[$filter_type]) ? $titles[$filter_type] : ucfirst($filter_type);
+    }
+    
+    private function render_sort_filter() {
+        $sort_options = [
+            'featured' => 'Featured',
+            'newest' => 'Newest first',
+            'price_asc' => 'Price: low to high',
+            'price_desc' => 'Price: high to low',
+            'name_asc' => 'Alphabetically, A-Z',
+            'name_desc' => 'Alphabetically, Z-A',
+        ];
+        
+        $first = true;
+        foreach ($sort_options as $value => $label) {
+            $checked = $first ? 'checked' : '';
+            $active_class = $first ? 'filter-active' : '';
+            echo '<li class="filter-item ' . $active_class . '">';
+            echo '<label for="Filter-sort-' . $value . '" class="filter-sort-by">';
+            echo '<span class="box-check"></span>';
+            echo '<input type="radio" name="sort_by" value="' . $value . '" id="Filter-sort-' . $value . '" ' . $checked . '>';
+            echo '<span>' . esc_html($label) . '</span>';
+            echo '</label>';
+            echo '</li>';
+            $first = false;
+        }
+    }
+    
+    private function render_categories_filter() {
+        $categories = get_terms([
+            'taxonomy' => 'product_cat',
+            'hide_empty' => true,
+        ]);
+        
+        if (!is_wp_error($categories) && !empty($categories)) {
+            foreach ($categories as $category) {
+                echo '<li class="filter-item">';
+                echo '<label for="Filter-category-' . $category->term_id . '">';
+                echo '<input type="checkbox" name="category[]" value="' . $category->slug . '" id="Filter-category-' . $category->term_id . '">';
+                echo '<span class="box-check"></span>';
+                echo '<span>' . esc_html($category->name) . ' (' . $category->count . ')</span>';
+                echo '</label>';
+                echo '</li>';
+            }
+        }
+    }
+    
+    private function render_brands_filter() {
+        // Get WooCommerce brands (assuming pa_brand attribute)
+        $brands = get_terms([
+            'taxonomy' => 'pa_brand',
+            'hide_empty' => true,
+        ]);
+        
+        // Fallback to product_brand taxonomy if pa_brand doesn't exist
+        if (is_wp_error($brands) || empty($brands)) {
+            $brands = get_terms([
+                'taxonomy' => 'product_brand',
+                'hide_empty' => true,
+            ]);
+        }
+        
+        // Manual fallback if no brand taxonomy exists
+        if (is_wp_error($brands) || empty($brands)) {
+            $manual_brands = ['Nike', 'Adidas', 'Puma', 'Under Armour', 'New Balance'];
+            foreach ($manual_brands as $brand) {
+                echo '<li class="filter-item">';
+                echo '<label for="Filter-brand-' . sanitize_title($brand) . '">';
+                echo '<input type="checkbox" name="brand[]" value="' . sanitize_title($brand) . '" id="Filter-brand-' . sanitize_title($brand) . '">';
+                echo '<span class="box-check"></span>';
+                echo '<span>' . esc_html($brand) . '</span>';
+                echo '</label>';
+                echo '</li>';
+            }
+        } else {
+            foreach ($brands as $brand) {
+                echo '<li class="filter-item">';
+                echo '<label for="Filter-brand-' . $brand->term_id . '">';
+                echo '<input type="checkbox" name="brand[]" value="' . $brand->slug . '" id="Filter-brand-' . $brand->term_id . '">';
+                echo '<span class="box-check"></span>';
+                echo '<span>' . esc_html($brand->name) . ' (' . $brand->count . ')</span>';
+                echo '</label>';
+                echo '</li>';
+            }
+        }
+    }
+    
+    private function render_price_range_filter($price_ranges) {
+        foreach ($price_ranges as $range) {
+            $value = $range['price_min'] . '-' . $range['price_max'];
+            echo '<li class="filter-item">';
+            echo '<label for="Filter-price-' . md5($value) . '">';
+            echo '<input type="checkbox" name="price_range[]" value="' . $value . '" id="Filter-price-' . md5($value) . '">';
+            echo '<span class="box-check"></span>';
+            echo '<span>' . esc_html($range['price_label']) . '</span>';
+            echo '</label>';
+            echo '</li>';
+        }
+    }
+    
+    private function render_product_type_filter() {
+        $product_types = ['Men', 'Women', 'Unisex', 'Kids'];
+        
+        foreach ($product_types as $type) {
+            echo '<li class="filter-item">';
+            echo '<label for="Filter-type-' . sanitize_title($type) . '">';
+            echo '<input type="checkbox" name="product_type[]" value="' . $type . '" id="Filter-type-' . sanitize_title($type) . '">';
+            echo '<span class="box-check"></span>';
+            echo '<span>' . esc_html($type) . '</span>';
+            echo '</label>';
+            echo '</li>';
+        }
+    }
+    
+    private function render_sizes_filter() {
+        $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+        
+        echo '<div class="ukuran-sepatu">';
+        foreach ($sizes as $size) {
+            echo '<li class="filter-item">';
+            echo '<label for="Filter-size-' . $size . '">';
+            echo '<input type="checkbox" name="size[]" value="' . $size . '" id="Filter-size-' . $size . '">';
+            echo '<span>' . esc_html($size) . '</span>';
+            echo '</label>';
+            echo '</li>';
+        }
+        echo '</div>';
+    }
+    
+    private function render_colors_filter() {
+        $colors = [
+            'black' => 'Black',
+            'white' => 'White',
+            'red' => 'Red',
+            'blue' => 'Blue',
+            'green' => 'Green',
+            'yellow' => 'Yellow',
+        ];
+        
+        foreach ($colors as $value => $label) {
+            echo '<li class="filter-item">';
+            echo '<label for="Filter-color-' . $value . '">';
+            echo '<input type="checkbox" name="color[]" value="' . $value . '" id="Filter-color-' . $value . '">';
+            echo '<span class="box-check"></span>';
+            echo '<span>' . esc_html($label) . '</span>';
+            echo '</label>';
+            echo '</li>';
+        }
     }
 }
