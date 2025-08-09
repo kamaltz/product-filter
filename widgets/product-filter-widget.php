@@ -322,6 +322,119 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
             ]
         );
         
+        $this->add_control(
+            'toggle_icon_type',
+            [
+                'label' => 'Icon Type',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'preset',
+                'options' => [
+                    'preset' => 'Preset Icons',
+                    'library' => 'Icon Library',
+                    'upload' => 'Upload Custom',
+                ],
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'toggle_icon',
+            [
+                'label' => 'Choose Icon',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'filter',
+                'options' => [
+                    'filter' => 'Filter Sliders',
+                    'hamburger' => 'Hamburger Menu',
+                    'grid' => 'Grid',
+                    'settings' => 'Settings',
+                ],
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                    'toggle_icon_type' => 'preset',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'toggle_icon_library',
+            [
+                'label' => 'Icon',
+                'type' => \Elementor\Controls_Manager::ICONS,
+                'default' => [
+                    'value' => 'fas fa-filter',
+                    'library' => 'fa-solid',
+                ],
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                    'toggle_icon_type' => 'library',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'toggle_icon_upload',
+            [
+                'label' => 'Upload Icon',
+                'type' => \Elementor\Controls_Manager::MEDIA,
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                    'toggle_icon_type' => 'upload',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'toggle_icon_color',
+            [
+                'label' => 'Icon Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '#000',
+                'selectors' => [
+                    '{{WRAPPER}} .filter-toggle-btn' => 'color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'toggle_bg_color',
+            [
+                'label' => 'Background Color',
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .filter-toggle-btn' => 'background-color: {{VALUE}};',
+                ],
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                ],
+            ]
+        );
+        
+        $this->add_control(
+            'toggle_border_radius',
+            [
+                'label' => 'Border Radius',
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 25,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .filter-toggle-btn' => 'border-radius: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'mobile_filter_toggle' => 'yes',
+                ],
+            ]
+        );
+        
         $this->end_controls_section();
     }
     
@@ -331,13 +444,12 @@ class ProductFilterWidget extends \Elementor\Widget_Base {
         $price_ranges = $settings['price_ranges'];
         $mobile_toggle = $settings['mobile_filter_toggle'] === 'yes';
         $filter_text = $settings['mobile_filter_text'] ?: 'Filter';
+        $icon_type = $settings['toggle_icon_type'] ?: 'preset';
         ?>
 <?php if ($mobile_toggle): ?>
 <div class="mobile-filter-toggle">
     <button class="filter-toggle-btn">
-        <svg width="39" height="32" viewBox="0 0 39 32" fill="none">
-            <path d="M25.6054 16.959C21.5723 16.959 17.5376 16.9697 13.5045 16.9452C12.9701 16.9421 12.7438 17.0911 12.5567 17.5886C11.895 19.3422 10.1975 20.4555 8.30983 20.454C6.42372 20.454 4.75609 19.3514 4.07709 17.5717C3.88534 17.068 3.63857 16.9083 3.11361 16.9421C2.43618 16.9866 1.75246 16.9575 1.07189 16.9513C0.421186 16.9452 0.00152706 16.6427 0.00938584 15.9854C0.0172446 15.3236 0.455765 15.0472 1.09861 15.0441C1.83262 15.0411 2.56663 15.0226 3.29907 15.0518C3.71087 15.0687 3.88062 14.9136 4.02522 14.542C4.77181 12.6425 6.39072 11.5369 8.33498 11.543C10.2478 11.5491 11.895 12.6594 12.5866 14.5051C12.7799 15.0226 13.0833 15.0441 13.5296 15.0441C20.6277 15.0364 27.7257 15.0411 34.8238 15.0426C35.8187 15.0426 36.8152 15.0503 37.8101 15.0411C38.4766 15.0349 38.9481 15.2622 38.9952 15.9731C39.0361 16.5889 38.5866 16.9482 37.7834 16.9498C33.7236 16.9544 29.6637 16.9513 25.6039 16.9513V16.9559L25.6054 16.959ZM8.35541 13.4855C6.91726 13.4686 5.74158 14.5881 5.73058 15.9839C5.71958 17.349 6.84181 18.4777 8.24382 18.513C9.69612 18.5499 10.8671 17.4627 10.8954 16.0545C10.9237 14.6403 9.79986 13.5039 8.35541 13.4855Z" fill="black"/>
-        </svg>
+        <?php echo $this->render_toggle_icon($settings, $icon_type); ?>
     </button>
 </div>
 <?php endif; ?>
@@ -473,46 +585,50 @@ $sticky_class = implode(' ', $sticky_classes);
     private function render_brands_filter() {
         global $wpdb;
         
-        // Get brands from WooCommerce products
-        $brands = $wpdb->get_results(
-            "SELECT DISTINCT meta_value as brand_name 
-             FROM {$wpdb->postmeta} pm
-             INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
-             WHERE pm.meta_key = '_product_brand' 
-             AND pm.meta_value != ''
-             AND p.post_type = 'product'
-             AND p.post_status = 'publish'
-             ORDER BY pm.meta_value ASC"
-        );
+        // Try WooCommerce brand taxonomies first
+        $brand_taxonomies = ['pa_brand', 'product_brand', 'pwb-brand', 'yith_product_brand'];
+        $brands = [];
         
-        // Fallback to taxonomy if meta field doesn't exist
-        if (empty($brands)) {
-            $brand_terms = get_terms([
-                'taxonomy' => 'pa_brand',
-                'hide_empty' => true,
-            ]);
-            
-            if (!is_wp_error($brand_terms) && !empty($brand_terms)) {
-                foreach ($brand_terms as $brand) {
-                    echo '<li class="filter-item">';
-                    echo '<label for="Filter-brand-' . $brand->term_id . '">';
-                    echo '<input type="checkbox" name="brand[]" value="' . $brand->slug . '" id="Filter-brand-' . $brand->term_id . '">';
-                    echo '<span class="box-check"></span>';
-                    echo '<span>' . esc_html($brand->name) . '</span>';
-                    echo '</label>';
-                    echo '</li>';
+        foreach ($brand_taxonomies as $taxonomy) {
+            if (taxonomy_exists($taxonomy)) {
+                $terms = get_terms([
+                    'taxonomy' => $taxonomy,
+                    'hide_empty' => true,
+                ]);
+                if (!is_wp_error($terms) && !empty($terms)) {
+                    $brands = $terms;
+                    break;
                 }
             }
-        } else {
-            foreach ($brands as $brand) {
-                echo '<li class="filter-item">';
-                echo '<label for="Filter-brand-' . sanitize_title($brand->brand_name) . '">';
-                echo '<input type="checkbox" name="brand[]" value="' . esc_attr($brand->brand_name) . '" id="Filter-brand-' . sanitize_title($brand->brand_name) . '">';
-                echo '<span class="box-check"></span>';
-                echo '<span>' . esc_html($brand->brand_name) . '</span>';
-                echo '</label>';
-                echo '</li>';
-            }
+        }
+        
+        // If no taxonomy found, try meta fields
+        if (empty($brands)) {
+            $meta_brands = $wpdb->get_results(
+                "SELECT DISTINCT pm.meta_value as name, pm.meta_value as slug
+                 FROM {$wpdb->postmeta} pm
+                 INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+                 WHERE pm.meta_key IN ('_product_brand', 'brand', '_brand')
+                 AND pm.meta_value != ''
+                 AND p.post_type = 'product'
+                 AND p.post_status = 'publish'
+                 ORDER BY pm.meta_value ASC"
+            );
+            $brands = $meta_brands;
+        }
+        
+        foreach ($brands as $brand) {
+            $brand_name = isset($brand->name) ? $brand->name : $brand->meta_value;
+            $brand_slug = isset($brand->slug) ? $brand->slug : sanitize_title($brand_name);
+            $brand_id = isset($brand->term_id) ? $brand->term_id : sanitize_title($brand_name);
+            
+            echo '<li class="filter-item">';
+            echo '<label for="Filter-brand-' . $brand_id . '">';
+            echo '<input type="checkbox" name="brand[]" value="' . esc_attr($brand_slug) . '" id="Filter-brand-' . $brand_id . '">';
+            echo '<span class="box-check"></span>';
+            echo '<span>' . esc_html($brand_name) . '</span>';
+            echo '</label>';
+            echo '</li>';
         }
     }
     
@@ -599,5 +715,36 @@ $sticky_class = implode(' ', $sticky_classes);
             echo '</label>';
             echo '</li>';
         }
+    }
+    
+    private function render_toggle_icon($settings, $icon_type) {
+        switch ($icon_type) {
+            case 'library':
+                if (!empty($settings['toggle_icon_library']['value'])) {
+                    ob_start();
+                    \Elementor\Icons_Manager::render_icon($settings['toggle_icon_library'], ['aria-hidden' => 'true']);
+                    return ob_get_clean();
+                }
+                break;
+            case 'upload':
+                if (!empty($settings['toggle_icon_upload']['url'])) {
+                    return '<img src="' . esc_url($settings['toggle_icon_upload']['url']) . '" alt="Filter">';
+                }
+                break;
+            default:
+                return $this->get_preset_icon($settings['toggle_icon'] ?: 'filter');
+        }
+        return $this->get_preset_icon('filter');
+    }
+    
+    private function get_preset_icon($icon_type) {
+        $icons = [
+            'filter' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 7H21M3 12H21M3 17H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="21" cy="7" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="21" cy="17" r="1" fill="currentColor"/></svg>',
+            'hamburger' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+            'grid' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/><rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/><rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/><rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" fill="none"/></svg>',
+            'settings' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.2569 9.77251 19.9859C9.5799 19.7148 9.31074 19.5067 9 19.385C8.69838 19.2519 8.36381 19.2122 8.03941 19.271C7.71502 19.3298 7.41568 19.4845 7.18 19.715L7.12 19.775C6.93425 19.961 6.71368 20.1085 6.47088 20.2091C6.22808 20.3098 5.96783 20.3616 5.705 20.3616C5.44217 20.3616 5.18192 20.3098 4.93912 20.2091C4.69632 20.1085 4.47575 19.961 4.29 19.775C4.10405 19.5893 3.95653 19.3687 3.85588 19.1259C3.75523 18.8831 3.70343 18.6228 3.70343 18.36C3.70343 18.0972 3.75523 17.8369 3.85588 17.5941C3.95653 17.3513 4.10405 17.1307 4.29 16.945L4.35 16.885C4.58054 16.6493 4.73519 16.35 4.794 16.0256C4.85282 15.7012 4.81312 15.3666 4.68 15.065C4.55324 14.7692 4.34276 14.517 4.07447 14.3393C3.80618 14.1616 3.49179 14.0663 3.17 14.065H3C2.46957 14.065 1.96086 13.8543 1.58579 13.4792C1.21071 13.1041 1 12.5954 1 12.065C1 11.5346 1.21071 11.0259 1.58579 10.6508C1.96086 10.2757 2.46957 10.065 3 10.065H3.09C3.42099 10.0573 3.742 9.95012 4.01309 9.75751C4.28417 9.5649 4.49226 9.29574 4.614 8.985C4.74712 8.68338 4.78682 8.34881 4.728 8.02441C4.66919 7.70002 4.51454 7.40068 4.284 7.165L4.224 7.105C4.03805 6.91925 3.89053 6.69868 3.78988 6.45588C3.68923 6.21308 3.63743 5.95283 3.63743 5.69C3.63743 5.42717 3.68923 5.16692 3.78988 4.92412C3.89053 4.68132 4.03805 4.46075 4.224 4.275C4.40975 4.08905 4.63032 3.94153 4.87312 3.84088C5.11592 3.74023 5.37617 3.68843 5.639 3.68843C5.90183 3.68843 6.16208 3.74023 6.40488 3.84088C6.64768 3.94153 6.86825 4.08905 7.054 4.275L7.114 4.335C7.34968 4.56554 7.649 4.72019 7.97339 4.779C8.29779 4.83782 8.63236 4.79812 8.934 4.665H9C9.29577 4.53824 9.54802 4.32776 9.72569 4.05947C9.90337 3.79118 9.99872 3.47679 10 3.155V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.635 19.206 7.95939C19.1472 8.28379 19.1869 8.61836 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15Z" stroke="currentColor" stroke-width="2"/></svg>'
+        ];
+        
+        return isset($icons[$icon_type]) ? $icons[$icon_type] : $icons['filter'];
     }
 }
