@@ -659,4 +659,65 @@ jQuery(document).ready(function ($) {
   // Initialize on page load
   initializeFromURL();
   initializeVisualStates();
+  
+  // Infinite Scroll
+  if ($('.infinite-scroll-container').length) {
+    let isLoading = false;
+    let currentPage = 1;
+    const maxPages = parseInt($('.infinite-scroll-container').data('max-pages'));
+    
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isLoading && currentPage < maxPages) {
+          loadMoreProducts();
+        }
+      });
+    }, {
+      rootMargin: '100px'
+    });
+    
+    if (document.querySelector('.load-more-trigger')) {
+      observer.observe(document.querySelector('.load-more-trigger'));
+    }
+    
+    function loadMoreProducts() {
+      if (isLoading) return;
+      
+      isLoading = true;
+      currentPage++;
+      
+      $('.loading-more').show();
+      
+      const perPage = $('.products-grid').data('per-page') || 12;
+      const filters = collectFilters();
+      
+      $.ajax({
+        url: productFilter.ajax_url,
+        type: 'POST',
+        data: {
+          action: 'filter_products',
+          filters: filters,
+          page: currentPage,
+          per_page: perPage,
+          nonce: productFilter.nonce
+        },
+        success: function(response) {
+          if (response.success && response.data.products) {
+            $('.products-grid').append(response.data.products);
+            
+            if (currentPage >= maxPages) {
+              $('.infinite-scroll-container').hide();
+            }
+          }
+        },
+        error: function() {
+          currentPage--;
+        },
+        complete: function() {
+          isLoading = false;
+          $('.loading-more').hide();
+        }
+      });
+    }
+  }
 });

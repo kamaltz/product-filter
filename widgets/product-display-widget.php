@@ -116,11 +116,16 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
         );
         
         $this->add_control(
-            'show_pagination',
+            'pagination_type',
             [
-                'label' => 'Show Pagination',
-                'type' => \Elementor\Controls_Manager::SWITCHER,
-                'default' => 'yes',
+                'label' => 'Pagination Type',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'pagination',
+                'options' => [
+                    'pagination' => 'Standard Pagination',
+                    'infinite' => 'Infinite Scroll',
+                    'none' => 'No Pagination',
+                ],
             ]
         );
         
@@ -430,49 +435,25 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
                 ?>
     </div>
 
-    <?php if ($settings['show_pagination'] === 'yes' && $query->max_num_pages > 1): ?>
-    <div class="product-pagination pagination-<?php echo esc_attr($settings['pagination_style']); ?> <?php echo $settings['pagination_border_bottom'] === 'yes' ? 'has-border-bottom' : ''; ?>">
+    <?php if ($settings['pagination_type'] === 'pagination' && $query->max_num_pages > 1): ?>
+    <div class="product-pagination">
         <?php
                 $current_page = max(1, get_query_var('paged', 1));
                 $max_pages = $query->max_num_pages;
                 
-                // Previous button
-                if ($current_page > 1) {
-                    echo '<button class="page-btn page-prev" data-page="' . ($current_page - 1) . '">';
-                    echo '<svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-                    echo '</button>';
-                }
-                
-                // Page numbers
-                $start_page = max(1, $current_page - 2);
-                $end_page = min($max_pages, $current_page + 2);
-                
-                if ($start_page > 1) {
-                    echo '<button class="page-btn" data-page="1">1</button>';
-                    if ($start_page > 2) {
-                        echo '<span class="page-dots">...</span>';
-                    }
-                }
-                
-                for ($i = $start_page; $i <= $end_page; $i++) {
+                for ($i = 1; $i <= $max_pages; $i++) {
                     $active_class = ($i === $current_page) ? 'active' : '';
                     echo '<button class="page-btn ' . $active_class . '" data-page="' . $i . '">' . $i . '</button>';
                 }
-                
-                if ($end_page < $max_pages) {
-                    if ($end_page < $max_pages - 1) {
-                        echo '<span class="page-dots">...</span>';
-                    }
-                    echo '<button class="page-btn" data-page="' . $max_pages . '">' . $max_pages . '</button>';
-                }
-                
-                // Next button
-                if ($current_page < $max_pages) {
-                    echo '<button class="page-btn page-next" data-page="' . ($current_page + 1) . '">';
-                    echo '<svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-                    echo '</button>';
-                }
                 ?>
+    </div>
+    <?php elseif ($settings['pagination_type'] === 'infinite' && $query->max_num_pages > 1): ?>
+    <div class="infinite-scroll-container" data-max-pages="<?php echo $query->max_num_pages; ?>" data-current-page="1">
+        <div class="load-more-trigger"></div>
+        <div class="loading-more" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading more products...</p>
+        </div>
     </div>
     <?php endif; ?>
 </div>
