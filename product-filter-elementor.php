@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Advanced Elementor widgets for product filtering and display with WooCommerce integration
- * Version: 2.7.1
+ * Version: 2.8.3
  * Author: kamaltz
  */
 
@@ -33,12 +33,7 @@ class ProductFilterElementor {
         // AJAX handlers
         add_action('wp_ajax_filter_products', [$this, 'ajax_filter_products']);
         add_action('wp_ajax_nopriv_filter_products', [$this, 'ajax_filter_products']);
-        add_action('wp_ajax_get_product_quick_view', [$this, 'ajax_get_product_quick_view']);
-        add_action('wp_ajax_nopriv_get_product_quick_view', [$this, 'ajax_get_product_quick_view']);
-        add_action('wp_ajax_add_to_cart', [$this, 'ajax_add_to_cart']);
-        add_action('wp_ajax_nopriv_add_to_cart', [$this, 'ajax_add_to_cart']);
-        add_action('wp_ajax_get_cart_count', [$this, 'ajax_get_cart_count']);
-        add_action('wp_ajax_nopriv_get_cart_count', [$this, 'ajax_get_cart_count']);
+
     }
     
     public function admin_notice_missing_elementor() {
@@ -246,80 +241,7 @@ class ProductFilterElementor {
         ]);
     }
     
-    public function ajax_get_product_quick_view() {
-        check_ajax_referer('product_filter_nonce', 'nonce');
-        
-        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-        
-        if (!$product_id) {
-            wp_send_json_error('Invalid product ID');
-        }
-        
-        $product = get_post($product_id);
-        if (!$product || $product->post_type !== 'product') {
-            wp_send_json_error('Product not found');
-        }
-        
-        ob_start();
-        $this->render_quick_view_modal($product);
-        $html = ob_get_clean();
-        
-        wp_send_json_success(['html' => $html]);
-    }
-    
-    public function ajax_add_to_cart() {
-        check_ajax_referer('product_filter_nonce', 'nonce');
-        
-        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-        $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
-        
-        if (!$product_id) {
-            wp_send_json_error('Invalid product ID');
-        }
-        
-        // If WooCommerce is active, use its cart system
-        if (class_exists('WooCommerce') && function_exists('WC')) {
-            $result = WC()->cart->add_to_cart($product_id, $quantity);
-            
-            if ($result) {
-                wp_send_json_success([
-                    'message' => 'Product added to cart successfully',
-                    'cart_count' => WC()->cart->get_cart_contents_count()
-                ]);
-            } else {
-                wp_send_json_error('Failed to add product to cart');
-            }
-        } else {
-            // Custom cart implementation
-            $cart = isset($_SESSION['custom_cart']) ? $_SESSION['custom_cart'] : [];
-            
-            if (isset($cart[$product_id])) {
-                $cart[$product_id] += $quantity;
-            } else {
-                $cart[$product_id] = $quantity;
-            }
-            
-            $_SESSION['custom_cart'] = $cart;
-            
-            wp_send_json_success([
-                'message' => 'Product added to cart successfully',
-                'cart_count' => array_sum($cart)
-            ]);
-        }
-    }
-    
-    public function ajax_get_cart_count() {
-        check_ajax_referer('product_filter_nonce', 'nonce');
-        
-        if (class_exists('WooCommerce') && function_exists('WC')) {
-            $count = WC()->cart->get_cart_contents_count();
-        } else {
-            $cart = isset($_SESSION['custom_cart']) ? $_SESSION['custom_cart'] : [];
-            $count = array_sum($cart);
-        }
-        
-        wp_send_json_success(['count' => $count]);
-    }
+
     
     private function render_product_item() {
         global $post;
@@ -359,10 +281,7 @@ class ProductFilterElementor {
         <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">
         <?php endif; ?>
 
-        <div class="product-overlay">
-            <button class="product-quick-view" data-product-id="<?php echo $product_id; ?>">Quick View</button>
-            <button class="product-add-to-cart" data-product-id="<?php echo $product_id; ?>">Add to Cart</button>
-        </div>
+
     </div>
     <div class="product-info">
         <h3 class="product-title"><?php the_title(); ?></h3>
@@ -401,33 +320,7 @@ class ProductFilterElementor {
 <?php
     }
     
-    private function render_quick_view_modal($product) {
-        // Quick view modal implementation
-        $product_id = $product->ID;
-        $price = get_post_meta($product_id, '_price', true);
-        $image = get_the_post_thumbnail_url($product_id, 'large');
-        ?>
-<div class="quick-view-modal">
-    <div class="modal-overlay"></div>
-    <div class="modal-content">
-        <button class="modal-close">&times;</button>
-        <div class="modal-body">
-            <div class="product-image">
-                <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($product->post_title); ?>">
-            </div>
-            <div class="product-details">
-                <h2><?php echo esc_html($product->post_title); ?></h2>
-                <div class="price">Rp <?php echo number_format($price, 0, ',', '.'); ?></div>
-                <div class="description">
-                    <?php echo wpautop($product->post_excerpt ?: substr($product->post_content, 0, 200) . '...'); ?>
-                </div>
-                <button class="add-to-cart-btn" data-product-id="<?php echo $product_id; ?>">Add to Cart</button>
-            </div>
-        </div>
-    </div>
-</div>
-<?php
-    }
+
 }
 
 new ProductFilterElementor();

@@ -115,19 +115,7 @@ jQuery(document).ready(function ($) {
     }
   });
 
-  // Quick view functionality
-  $(document).on("click", ".product-quick-view", function (e) {
-    e.stopPropagation();
-    const productId = $(this).data("product-id");
-    openQuickView(productId);
-  });
 
-  // Add to cart functionality
-  $(document).on("click", ".product-add-to-cart", function (e) {
-    e.stopPropagation();
-    const productId = $(this).data("product-id");
-    addToCart(productId);
-  });
 
   // Product item click handler
   $(document).on("click", ".product-item", function () {
@@ -366,101 +354,7 @@ jQuery(document).ready(function ($) {
     }
   }
 
-  function openQuickView(productId) {
-    // Create modal or handle quick view
-    console.log("Opening quick view for product:", productId);
 
-    // Example implementation:
-    // You can create a modal here or redirect to a quick view page
-    // For now, we'll just log it
-
-    // Optional: Open in a modal
-    /*
-        $.ajax({
-            url: productFilter.ajax_url,
-            type: 'POST',
-            data: {
-                action: 'get_product_quick_view',
-                product_id: productId,
-                nonce: productFilter.nonce
-            },
-            success: function(response) {
-                if (response.success) {
-                    showModal(response.data.html);
-                }
-            }
-        });
-        */
-  }
-
-  function addToCart(productId) {
-    const $button = $(`.product-add-to-cart[data-product-id="${productId}"]`);
-    const originalText = $button.text();
-
-    $button.text("Adding...").prop("disabled", true);
-
-    $.ajax({
-      url: productFilter.ajax_url,
-      type: "POST",
-      data: {
-        action: "add_to_cart",
-        product_id: productId,
-        nonce: productFilter.nonce,
-      },
-      success: function (response) {
-        if (response.success) {
-          $button.text("Added!");
-          setTimeout(() => {
-            $button.text(originalText).prop("disabled", false);
-          }, 2000);
-
-          // Update cart count if exists
-          updateCartCount();
-
-          // Show success notification
-          showNotification("Product added to cart!", "success");
-        } else {
-          $button.text("Failed").addClass("error");
-          setTimeout(() => {
-            $button
-              .text(originalText)
-              .removeClass("error")
-              .prop("disabled", false);
-          }, 2000);
-
-          showNotification("Failed to add product to cart.", "error");
-        }
-      },
-      error: function () {
-        $button.text("Error").addClass("error");
-        setTimeout(() => {
-          $button
-            .text(originalText)
-            .removeClass("error")
-            .prop("disabled", false);
-        }, 2000);
-
-        showNotification("Connection error. Please try again.", "error");
-      },
-    });
-  }
-
-  function updateCartCount() {
-    // Update cart count in header if exists
-    $.ajax({
-      url: productFilter.ajax_url,
-      type: "POST",
-      data: {
-        action: "get_cart_count",
-        nonce: productFilter.nonce,
-      },
-      success: function (response) {
-        if (response.success) {
-          $(".cart-count").text(response.data.count);
-        }
-      },
-    });
-  }
 
   function showNotification(message, type = "info") {
     // Create a simple notification system
