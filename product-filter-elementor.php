@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Advanced Elementor widgets for product filtering and display with WooCommerce integration
- * Version: 2.9.3
+ * Version: 2.9.7
  * Author: kamaltz
  */
 
