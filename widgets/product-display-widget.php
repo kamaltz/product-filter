@@ -421,7 +421,12 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
     </div>
     <?php endif; ?>
 
-    <div class="products-grid desktop-cols-<?php echo esc_attr($settings['desktop_columns']); ?> mobile-cols-<?php echo esc_attr($settings['mobile_columns']); ?>" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
+    <?php
+    $mobile_cols = esc_attr($settings['mobile_columns']);
+    $per_page = esc_attr($settings['products_per_page']);
+    ?>
+    <div class="products-grid desktop-cols-<?php echo $desktop_cols; ?> mobile-cols-<?php echo $mobile_cols; ?>"
+        data-per-page="<?php echo $per_page; ?>">
         <?php
                 if ($query->have_posts()) {
                     while ($query->have_posts()) {
@@ -482,7 +487,8 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
 <div class="product-item" data-product-id="<?php echo $product_id; ?>">
     <a href="<?php echo esc_url(get_permalink($product_id)); ?>" class="product-link">
         <div class="pf-product-image">
-            <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>" class="main-image">
+            <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>"
+                class="main-image">
             <?php if ($hover_image): ?>
             <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">
             <?php endif; ?>
