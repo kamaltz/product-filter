@@ -481,7 +481,7 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
         ?>
 <div class="product-item" data-product-id="<?php echo $product_id; ?>">
     <a href="<?php echo esc_url(get_permalink($product_id)); ?>" class="product-link">
-        <div class="product-image">
+        <div class="pf-product-image">
             <img src="<?php echo $image ? esc_url($image) : $placeholder; ?>" alt="<?php the_title(); ?>" class="main-image">
             <?php if ($hover_image): ?>
             <img src="<?php echo esc_url($hover_image); ?>" alt="<?php the_title(); ?>" class="hover-image">

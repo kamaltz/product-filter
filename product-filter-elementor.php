@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Advanced Elementor widgets for product filtering and display with WooCommerce integration
- * Version: 2.8.3
+ * Version: 2.9.0
  * Author: kamaltz
  */
 
@@ -268,7 +268,7 @@ class ProductFilterElementor {
         }
         ?>
 <div class="product-item" data-product-id="<?php echo $product_id; ?>">
-    <div class="product-image">
+    <div class="pf-product-image">
         <?php if ($is_new): ?>
         <div class="product-badge product-badge-new">New</div>
         <?php elseif ($on_sale): ?>
