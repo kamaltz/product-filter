@@ -2,8 +2,6 @@
 /**
  * Plugin Name: Product Filter Elementor
  * Description: Advanced Elementor widgets for product filtering and display with WooCommerce integration
-mobile-cols-2" data-per-page="10">
-<div class="products-grid desktop-cols-<?php echo esc_attr($settings['desktop_columns']); ?> mobile-cols-<?php echo esc_attr($settings['mobile_columns']); ?>" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
  * Version: 2.9.3
  * Author: kamaltz
  */
