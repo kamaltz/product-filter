@@ -80,6 +80,24 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
         );
         
         $this->add_control(
+            'tablet_columns',
+            [
+                'label' => 'Tablet Columns',
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => '3',
+                'options' => [
+                    '1' => '1',
+                    '2' => '2',
+                    '3' => '3',
+                    '4' => '4',
+                ],
+                'selectors' => [
+                    '(tablet){{WRAPPER}} .products-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr) !important;',
+                ],
+            ]
+        );
+        
+        $this->add_control(
             'mobile_columns',
             [
                 'label' => 'Mobile Columns',
@@ -89,6 +107,9 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
                     '1' => '1',
                     '2' => '2',
                     '3' => '3',
+                ],
+                'selectors' => [
+                    '(mobile){{WRAPPER}} .products-grid' => 'grid-template-columns: repeat({{VALUE}}, 1fr) !important;',
                 ],
             ]
         );
@@ -421,7 +442,13 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
     </div>
     <?php endif; ?>
 
-    <div class="products-grid desktop-cols-<?php echo esc_attr($settings['desktop_columns']); ?> mobile-cols-<?php echo esc_attr($settings['mobile_columns']); ?>" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
+    <?php
+    $desktop_cols = esc_attr($settings['desktop_columns']);
+    $tablet_cols = esc_attr($settings['tablet_columns']);
+    $mobile_cols = esc_attr($settings['mobile_columns']);
+    $per_page = esc_attr($settings['products_per_page']);
+    ?>
+    <div class="products-grid desktop-cols-<?php echo $desktop_cols; ?> tablet-cols-<?php echo $tablet_cols; ?> mobile-cols-<?php echo $mobile_cols; ?>" data-per-page="<?php echo $per_page; ?>">
         <?php
                 if ($query->have_posts()) {
                     while ($query->have_posts()) {
