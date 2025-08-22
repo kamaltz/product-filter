@@ -421,7 +421,11 @@ class ProductDisplayWidget extends \Elementor\Widget_Base {
     </div>
     <?php endif; ?>
 
-    <div class="products-grid desktop-cols-<?php echo esc_attr($settings['desktop_columns']); ?> mobile-cols-<?php echo esc_attr($settings['mobile_columns']); ?>" data-per-page="<?php echo esc_attr($settings['products_per_page']); ?>">
+    <?php
+    $mobile_cols = esc_attr($settings['mobile_columns']);
+    $per_page = esc_attr($settings['products_per_page']);
+    ?>
+    <div class="products-grid desktop-cols-<?php echo $desktop_cols; ?> mobile-cols-<?php echo $mobile_cols; ?>" data-per-page="<?php echo $per_page; ?>">
         <?php
                 if ($query->have_posts()) {
                     while ($query->have_posts()) {
