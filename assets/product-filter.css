@@ -354,6 +354,14 @@
 .products-grid.desktop-cols-5 { grid-template-columns: repeat(5, 1fr); }
 .products-grid.desktop-cols-6 { grid-template-columns: repeat(6, 1fr); }
 
+/* Tablet Column Classes */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .products-grid.tablet-cols-1 { grid-template-columns: repeat(1, 1fr) !important; }
+  .products-grid.tablet-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+  .products-grid.tablet-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+  .products-grid.tablet-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+}
+
 /* Mobile Column Classes */
 @media (max-width: 768px) {
   .products-grid.mobile-cols-1 { grid-template-columns: repeat(1, 1fr) !important; }
@@ -845,16 +853,16 @@
   display: block;
 }
 
-/* Responsive Design */
+/* Responsive Design - Fallback for grids without column classes */
 @media (max-width: 1200px) {
-  .products-grid {
+  .products-grid:not([class*="desktop-cols-"]):not([class*="tablet-cols-"]):not([class*="mobile-cols-"]) {
     grid-template-columns: repeat(3, 1fr);
     gap: 25px;
   }
 }
 
 @media (max-width: 768px) {
-  .products-grid {
+  .products-grid:not([class*="desktop-cols-"]):not([class*="tablet-cols-"]):not([class*="mobile-cols-"]) {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
